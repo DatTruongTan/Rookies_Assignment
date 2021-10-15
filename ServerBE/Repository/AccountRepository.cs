@@ -32,7 +32,7 @@ namespace ServerBE.Repository
         {
             var user = new User()
             {
-                Username = signUpModel.Username,
+                UserName = signUpModel.Username,
                 Email = signUpModel.Email,
             };
 
@@ -64,11 +64,6 @@ namespace ServerBE.Repository
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public Task<string> LoginAsync(SignUpModel registerModel)
-        {
-            throw new NotImplementedException();
         }
     }
 }

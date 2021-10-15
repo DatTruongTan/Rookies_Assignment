@@ -9,7 +9,7 @@ namespace ServerBE.Repository
 {
     public interface IAccountRepository
     {
-        Task<IdentityResult> SignUpAsync(SignUpModel registerModel);
-        Task<string> LoginAsync(SignUpModel registerModel);
+        Task<IdentityResult> SignUpAsync(SignUpModel signUpModel);
+        Task<string> LoginAsync(SignInModel signInModel);
     }
 }

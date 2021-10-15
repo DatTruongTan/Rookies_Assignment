@@ -28,19 +28,6 @@ namespace ServerBE.Controllers
             _accountRepository = accountRepository;
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] SignInModel signInModel)
-        //{
-        //    var result = await _accountRepository.LoginAsync(signInModel);
-
-        //    if (string.IsNullOrEmpty(result))
-        //    {
-        //        return Unauthorized();
-        //    }
-
-        //    return Ok(result);
-        //}
-
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpModel signUpModel)
         {
@@ -52,7 +39,20 @@ namespace ServerBE.Controllers
             }
 
             //return Unauthorized();
-            return Content("OK");
+            return Content("Signed Up Succesfully!!!");
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] SignInModel signInModel)
+        {
+            var result = await _accountRepository.LoginAsync(signInModel);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(result);
         }
 
         //[HttpPost]
