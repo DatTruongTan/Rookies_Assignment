@@ -17,6 +17,12 @@ using ServerBE.Data;
 using Microsoft.AspNetCore.Identity;
 using ServerBE.IdentityServer4;
 using Microsoft.IdentityModel.Tokens;
+using IdentityServer4.Configuration;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using ServerBE.Repository;
 
 namespace ServerBE
 {
@@ -32,31 +38,81 @@ namespace ServerBE
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var builder = services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients);
-
-            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
-            {
-                options.Authority = "https://localhost:5001";
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = false
-                };
-            });
-
-            services.AddControllers();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RookieConnection")));
 
-            services.AddIdentity<Customer, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(option =>
+                {
+                    option.SaveToken = true;
+                    option.RequireHttpsMetadata = false;
+                    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["JWT:ValidAudience"],
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    };
+                });
+
+            services.AddControllers();
+            services.AddTransient<IAccountRepository, AccountRepository>();
+
+            //services.AddIdentityServer()
+            //    .AddDeveloperSigningCredential()
+            //    .AddInMemoryApiScopes(Config.ApiScopes)
+            //    .AddInMemoryClients(Config.Clients);
+
+            //services.AddIdentityServer(options =>
+            //{
+            //    options.Events.RaiseErrorEvents = true;
+            //    options.Events.RaiseInformationEvents = true;
+            //    options.Events.RaiseFailureEvents = true;
+            //    options.Events.RaiseSuccessEvents = true;
+            //    options.UserInteraction.LoginUrl = "/Account/Login";
+            //    options.UserInteraction.LogoutUrl = "/Account/Logout";
+            //    options.Authentication = new AuthenticationOptions()
+            //    {
+            //        CookieLifetime = TimeSpan.FromHours(10), // ID server cookie timeout set to 10 hours
+            //        CookieSlidingExpiration = true
+            //    };
+            //})
+            //    .AddConfigurationStore(options =>
+            //    {
+            //        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+            //    })
+            //    .AddOperationalStore(options =>
+            //    {
+            //        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+            //        options.EnableTokenCleanup = true;
+            //    })
+            //    .AddAspNetIdentity<IdentityDbContext>();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerBE", Version = "v1" });
             });
+
+            //services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+            //{
+            //    options.Authority = "https://localhost:5001";
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateAudience = false
+            //    };
+            //});
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,8 +128,9 @@ namespace ServerBE
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
