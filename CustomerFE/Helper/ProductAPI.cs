@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Shared.Config;
 
 namespace CustomerFE.Helper
 {
@@ -11,7 +12,7 @@ namespace CustomerFE.Helper
         public HttpClient Initial()
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:5001/");
+            client.BaseAddress = new Uri("https://localhost:44373");
             return client;
         }
     }
