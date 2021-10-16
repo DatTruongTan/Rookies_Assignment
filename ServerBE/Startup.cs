@@ -22,7 +22,8 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
-using ServerBE.Repository;
+using Shared.Constants;
+using ServerBE.Security.Authorization.Requirements;
 
 namespace ServerBE
 {
@@ -46,28 +47,81 @@ namespace ServerBE
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(option =>
+            services.ConfigureApplicationCookie(config =>
             {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.LoginPath = "/Authenticate/Login";
+            });
+
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.EmitStaticAudienceClaim = true;
             })
-                .AddJwtBearer(option =>
+               .AddInMemoryIdentityResources(IS4Config.IdentityResources)
+               .AddInMemoryApiScopes(IS4Config.ApiScopes)
+               .AddInMemoryClients(IS4Config.Clients)
+               .AddAspNetIdentity<User>()
+               .AddProfileService<IS4Profile>()
+               .AddDeveloperSigningCredential();
+
+            services.AddAuthentication()
+            .AddLocalApi("Bearer", option =>
+            {
+                option.ExpectedScope = "ShoppingAPI";
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(ConstSecurity.BEARER_POLICY, policy =>
                 {
-                    option.SaveToken = true;
-                    option.RequireHttpsMetadata = false;
-                    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["JWT:ValidAudience"],
-                        ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                    };
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
                 });
 
+                options.AddPolicy(ConstSecurity.ADMIN_ROLE_POLICY, policy =>
+                    policy.Requirements.Add(new AdminRoleRequirement()));
+            });
+
+            //services.AddAuthentication(option =>
+            //{
+            //    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //    .AddJwtBearer(option =>
+            //    {
+            //        option.SaveToken = true;
+            //        option.RequireHttpsMetadata = false;
+            //        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidAudience = Configuration["JWT:ValidAudience"],
+            //            ValidIssuer = Configuration["JWT:ValidIssuer"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+            //        };
+            //    });
+
             services.AddControllers();
-            services.AddTransient<IAccountRepository, AccountRepository>();
+            //services.AddTransient<IAccountRepository, AccountRepository>();
+
+            //services.AddIdentityServer(options =>
+            //{
+            //    options.Events.RaiseErrorEvents = true;
+            //    options.Events.RaiseInformationEvents = true;
+            //    options.Events.RaiseFailureEvents = true;
+            //    options.Events.RaiseSuccessEvents = true;
+            //    options.EmitStaticAudienceClaim = true;
+            //})
+            //  .AddInMemoryIdentityResources(Config.IdentityResources)
+            //  .AddInMemoryApiScopes(Config.ApiScopes)
+            //  .AddInMemoryClients(Config.Clients)
+            //  .AddAspNetIdentity<User>()
+            //  .AddProfileService<CustomProfileService>()
+            //  .AddDeveloperSigningCredential();
 
             //services.AddIdentityServer()
             //    .AddDeveloperSigningCredential()
@@ -113,6 +167,16 @@ namespace ServerBE
             //    };
             //});
 
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowOrigins",
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://localhost:3000")
+            //                .AllowAnyHeader()
+            //                .AllowAnyMethod();
+            //        });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,9 +190,13 @@ namespace ServerBE
             }
 
             app.UseHttpsRedirection();
+            
+            //app.UseCors("AllowOrigins");
 
             app.UseRouting();
-            //app.UseIdentityServer();
+
+            app.UseIdentityServer();
+            app.UseAuthorization();
 
             app.UseAuthentication();
             app.UseAuthorization();
