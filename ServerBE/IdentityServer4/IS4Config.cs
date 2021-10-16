@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerBE.IdentityServer4
 {
-    public class Config
+    public static class IS4Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
             new List<IdentityResource>
@@ -16,23 +16,23 @@ namespace ServerBE.IdentityServer4
                 new IdentityResources.Profile(),
             };
 
-        public static IEnumerable<ApiResource> ApiResources =>
-            new List<ApiResource>
-            {
-            new ApiResource("demoAPI","Test API Scope")
-            };
+        //public static IEnumerable<ApiResource> ApiResources =>
+        //    new List<ApiResource>
+        //    {
+        //    new ApiResource("ShoppingAPI","Test API Scope")
+        //    };
 
-        public static IEnumerable<ApiScope> ApiScopes => 
+        public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-            new ApiScope("demoAPI","Test API Scope")
+            new ApiScope("ShoppingAPI","Shopping API Scope")
             };
 
         public static IEnumerable<Client> Clients => new List<Client>
         {
             new Client
             {
-                ClientId = "demoClient",
+                ClientId = "Client",
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets =
                 {
@@ -47,7 +47,7 @@ namespace ServerBE.IdentityServer4
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "demoAPI"
+                    "ShoppingAPI"
                 }
             }
         };
