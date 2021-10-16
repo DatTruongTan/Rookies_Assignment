@@ -23,6 +23,7 @@ namespace ServerBE.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> Getproducts()
@@ -30,6 +31,7 @@ namespace ServerBE.Controllers
             return await _context.products.ToListAsync();
         }
 
+        [AllowAnonymous]
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(string id)
