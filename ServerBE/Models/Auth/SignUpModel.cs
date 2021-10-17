@@ -21,5 +21,7 @@ namespace ServerBE.Models.Auth
 
         [Required(ErrorMessage = "Password need to be comfirmed")]
         public string ConfirmPassword { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

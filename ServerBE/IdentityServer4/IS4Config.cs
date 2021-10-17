@@ -23,33 +23,55 @@ namespace ServerBE.IdentityServer4
         //    };
 
         public static IEnumerable<ApiScope> ApiScopes =>
-            new List<ApiScope>
+            new ApiScope[]
             {
-            new ApiScope("ShoppingAPI","Shopping API Scope")
+                new ApiScope("shoppingAPI","Shopping API Scope")
             };
 
-        public static IEnumerable<Client> Clients => new List<Client>
-        {
-            new Client
+        public static IEnumerable<Client> Clients => 
+            new List<Client>
             {
-                ClientId = "Client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets =
+                new Client
                 {
-                    new Secret("demoSecret".Sha256())
+                    ClientId = "client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    RedirectUris = { "https://localhost:44343/signin-oidc" },
+
+                    PostLogoutRedirectUris = { "https://localhost:44343/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "shoppingAPI"
+                    }
                 },
 
-                RedirectUris = { "https://localhost:44343/signin-oidc" },
+                new Client
+                    {
+                        ClientId = "swagger",
+                        ClientSecrets = { new Secret("secret".Sha256()) },
+                        AllowedGrantTypes = GrantTypes.Code,
 
-                PostLogoutRedirectUris = { "https://localhost:44343/signout-callback-oidc" },
+                        RequireConsent = false,
+                        RequirePkce = true,
 
-                AllowedScopes = new List<string>
-                {
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile,
-                    "ShoppingAPI"
-                }
-            }
-        };
+                        RedirectUris =           { $"https://localhost:44343/swagger/oauth2-redirect.html" },
+                        PostLogoutRedirectUris = { $"https://localhost:44343/swagger/oauth2-redirect.html" },
+                        AllowedCorsOrigins =     { $"https://localhost:44343" },
+
+                        AllowedScopes = new List<string>
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            "shoppingAPI"
+                        }
+                    }
+            };
     }
 }
