@@ -24,6 +24,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Shared.Constants;
 using ServerBE.Security.Authorization.Requirements;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ServerBE
 {
@@ -43,13 +44,14 @@ namespace ServerBE
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RookieConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(config =>
             {
-                config.LoginPath = "/Authenticate/Login";
+                config.LoginPath = "/Authenticate/SignIn";
+                config.LogoutPath = "/Authenticate/Logout";
             });
 
             services.AddIdentityServer(options =>
@@ -85,87 +87,39 @@ namespace ServerBE
                     policy.Requirements.Add(new AdminRoleRequirement()));
             });
 
-            //services.AddAuthentication(option =>
-            //{
-            //    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //    .AddJwtBearer(option =>
-            //    {
-            //        option.SaveToken = true;
-            //        option.RequireHttpsMetadata = false;
-            //        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidateAudience = true,
-            //            ValidAudience = Configuration["JWT:ValidAudience"],
-            //            ValidIssuer = Configuration["JWT:ValidIssuer"],
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-            //        };
-            //    });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
-            //services.AddTransient<IAccountRepository, AccountRepository>();
-
-            //services.AddIdentityServer(options =>
-            //{
-            //    options.Events.RaiseErrorEvents = true;
-            //    options.Events.RaiseInformationEvents = true;
-            //    options.Events.RaiseFailureEvents = true;
-            //    options.Events.RaiseSuccessEvents = true;
-            //    options.EmitStaticAudienceClaim = true;
-            //})
-            //  .AddInMemoryIdentityResources(Config.IdentityResources)
-            //  .AddInMemoryApiScopes(Config.ApiScopes)
-            //  .AddInMemoryClients(Config.Clients)
-            //  .AddAspNetIdentity<User>()
-            //  .AddProfileService<CustomProfileService>()
-            //  .AddDeveloperSigningCredential();
-
-            //services.AddIdentityServer()
-            //    .AddDeveloperSigningCredential()
-            //    .AddInMemoryApiScopes(Config.ApiScopes)
-            //    .AddInMemoryClients(Config.Clients);
-
-            //services.AddIdentityServer(options =>
-            //{
-            //    options.Events.RaiseErrorEvents = true;
-            //    options.Events.RaiseInformationEvents = true;
-            //    options.Events.RaiseFailureEvents = true;
-            //    options.Events.RaiseSuccessEvents = true;
-            //    options.UserInteraction.LoginUrl = "/Account/Login";
-            //    options.UserInteraction.LogoutUrl = "/Account/Logout";
-            //    options.Authentication = new AuthenticationOptions()
-            //    {
-            //        CookieLifetime = TimeSpan.FromHours(10), // ID server cookie timeout set to 10 hours
-            //        CookieSlidingExpiration = true
-            //    };
-            //})
-            //    .AddConfigurationStore(options =>
-            //    {
-            //        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            //    })
-            //    .AddOperationalStore(options =>
-            //    {
-            //        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            //        options.EnableTokenCleanup = true;
-            //    })
-            //    .AddAspNetIdentity<IdentityDbContext>();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerBE", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shopping API Scope", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri("/connect/token", UriKind.Relative),
+                            AuthorizationUrl = new Uri("/connect/authorize", UriKind.Relative),
+                            Scopes = new Dictionary<string, string> { { "shoppingAPI", "Shopping API Scope" } }
+                        },
+                    },
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new List<string>{ "shoppingAPI" }
+                    }
+                });
             });
 
-            //services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
-            //{
-            //    options.Authority = "https://localhost:5001";
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateAudience = false
-            //    };
-            //});
+            services.AddRazorPages();
 
             //services.AddCors(options =>
             //{
@@ -186,11 +140,18 @@ namespace ServerBE
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServerBE v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.OAuthClientId("swagger");
+                    c.OAuthClientSecret("secret");
+                    c.OAuthUsePkce();
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shopping API Scope");
+                });
             }
 
             app.UseHttpsRedirection();
-            
+            app.UseStaticFiles();
+
             //app.UseCors("AllowOrigins");
 
             app.UseRouting();
@@ -203,7 +164,11 @@ namespace ServerBE
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
