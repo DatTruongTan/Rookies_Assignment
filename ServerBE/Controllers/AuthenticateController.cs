@@ -60,7 +60,7 @@ namespace ServerBE.Controllers
 
             if (button.Equals("cancel"))
             {
-                return Redirect("~/");
+                return Redirect("https://localhost:44343/");
             }
 
             if (!ModelState.IsValid)
@@ -107,7 +107,7 @@ namespace ServerBE.Controllers
             {
                 await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                return Redirect(context.RedirectUri);
+                return Redirect("https://localhost:44343/");
             }
 
             var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
