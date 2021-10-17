@@ -1,9 +1,11 @@
+using CustomerFE.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,39 @@ namespace CustomerFE
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:44373";
+                    options.RequireHttpsMetadata = false;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.ClientId = "client";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
+
+                    options.SaveTokens = true;
+
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("shoppingAPI");
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+                });
+            services.AddHttpContextAccessor();
+            services.AddCustomHttpClient(Configuration);
+            //services.AddServices();
+            services.AddRazorPages();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllersWithViews();
             services.AddHttpClient();
         }
@@ -45,6 +80,7 @@ namespace CustomerFE
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -52,6 +88,7 @@ namespace CustomerFE
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
