@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServerBE.Models;
 using ServerBE.Models.Auth;
-using ServerBE.Options;
 using Shared.UserRole;
 using System;
 using System.Collections.Generic;
@@ -56,18 +55,18 @@ namespace ServerBE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp(/*[FromBody]*/ SignUpModel signUpModel/*, string button*/)
+        public async Task<IActionResult> SignUp(/*[FromBody]*/ SignUpModel signUpModel, string button)
         {
-            
-            //if (button.Equals("cancel"))
-            //{
-            //    return Redirect("~/");
-            //}
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return View("Sign Up", signUpModel);
-            //}
+            if (button.Equals("cancel"))
+            {
+                return Redirect("~/");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Sign Up", signUpModel);
+            }
 
             var user = new User()
             {
@@ -104,12 +103,12 @@ namespace ServerBE.Controllers
         {
             var context = await _interaction.GetAuthorizationContextAsync(signInModel.ReturnUrl);
 
-            //if (button.Equals("cancel"))
-            //{
-            //    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+            if (button.Equals("cancel"))
+            {
+                await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-            //    return Redirect(context.RedirectUri);
-            //}
+                return Redirect(context.RedirectUri);
+            }
 
             var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
 
