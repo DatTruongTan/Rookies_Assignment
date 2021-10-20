@@ -25,6 +25,9 @@ using Microsoft.AspNetCore.Authentication;
 using Shared.Constants;
 using ServerBE.Security.Authorization.Requirements;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using ServerBE.Services;
+using Microsoft.AspNetCore.Authorization;
+using ServerBE.Security.Authorization.Handlers;
 
 namespace ServerBE
 {
@@ -86,6 +89,9 @@ namespace ServerBE
                 options.AddPolicy(ConstSecurity.ADMIN_ROLE_POLICY, policy =>
                     policy.Requirements.Add(new AdminRoleRequirement()));
             });
+            
+            services.AddSingleton<IAuthorizationHandler, AdminRoleHandler>();
+            services.AddTransient<IFileStorageService, FileStorageService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
