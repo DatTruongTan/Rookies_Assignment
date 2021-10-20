@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServerBE.Models;
 using ServerBE.Models.Auth;
-using Shared.UserRole;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

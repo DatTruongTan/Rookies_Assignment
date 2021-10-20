@@ -1,51 +1,132 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServerBE.Data;
+using ServerBE.Extensions;
 using ServerBE.Models;
+using ServerBE.Services;
+using Shared;
+using Shared.Constants;
+using Shared.Dto;
+using Shared.Dto.Product;
+using Shared.Enum;
 
 namespace ServerBE.Controllers
 {
-    [Authorize]
+    //[Authorize("Bearer")]
+    //[Authorize(Policy = ConstSecurity.ADMIN_ROLE_POLICY)]
     [EnableCors("AllowOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileStorageService _fileStorageService;
+        private readonly IMapper _mapper;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(
+            ApplicationDbContext context,
+            IFileStorageService fileStorageService,
+            IMapper mapper
+            )
         {
             _context = context;
+            _fileStorageService = fileStorageService;
+            _mapper = mapper;
         }
 
-        [AllowAnonymous]
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> Getproducts()
+        [AllowAnonymous]
+        public async Task<ActionResult<PagedResponeDto<ProductDto>>> Getproducts(
+            [FromQuery] ProductCriteriaDto productCriteriaDto,
+            CancellationToken cancellationToken
+            )
         {
-            return await _context.products.ToListAsync();
+            var productQuery = _context
+                                    .products
+                                    .Where(x => !x.IsDeleted)
+                                    .AsQueryable();
+
+            productQuery = ProductFilter(productQuery, productCriteriaDto);
+
+            var pageProducts = await productQuery
+                                        .AsNoTracking()
+                                        .PaginateAsync(productCriteriaDto, cancellationToken);
+
+            var productDto = _mapper.Map<IEnumerable<ProductDto>>(pageProducts.Items);
+            return new PagedResponeDto<ProductDto>
+            {
+                CurrentPage = pageProducts.CurrentPage,
+                TotalPages = pageProducts.TotalPages,
+                TotalItems = pageProducts.TotalItems,
+                Search = productCriteriaDto.Search,
+                SortColumn = productCriteriaDto.SortColumn,
+                SortOrder = productCriteriaDto.SortOrder,
+                Limit = productCriteriaDto.Limit,
+                Items = productDto
+            };
+            //return await _context.products.ToListAsync();
         }
 
-        [AllowAnonymous]
+        #region Private Method
+        private IQueryable<Product> ProductFilter(
+            IQueryable<Product> productQuery,
+            ProductCriteriaDto productCriteriaDto)
+        {
+            if (!String.IsNullOrEmpty(productCriteriaDto.Search))
+            {
+                productQuery = productQuery.Where(b =>
+                    b.Name.Contains(productCriteriaDto.Search));
+            }
+
+            if (productCriteriaDto.Types != null &&
+                productCriteriaDto.Types.Count() > 0 &&
+               !productCriteriaDto.Types.Any(x => x == (int)BrandEnum.All))
+            {
+                productQuery = productQuery.Where(x =>
+                    productCriteriaDto.Types.Any(t => t == x.Brand));
+            }
+
+            return productQuery;
+        }
+        #endregion
+
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(string id)
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductViewModel>> GetProduct(string id)
         {
-            var product = await _context.products.FindAsync(id);
+            var product = await _context
+                                    .products
+                                    .Where(x => !x.IsDeleted && x.Id == id)
+                                    .FirstOrDefaultAsync();
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            return product;
+            var productViewModel = new ProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Brand = product.Brand,
+                Gender = product.Gender,
+                Size = product.Size,
+                Rating = product.Rating,
+                ImagePath = _fileStorageService.GetFileUrl(product.ImagePath)
+            };
+            return productViewModel;
         }
 
         // PUT: api/Products/5
@@ -83,26 +164,35 @@ namespace ServerBE.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<ProductViewModel>> PostProduct([FromForm] ProductCreateRequest productCreateRequest)
         {
-            _context.products.Add(product);
-            try
+            var product = new Product
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
+                Id = Guid.NewGuid().ToString(),
+                Name = productCreateRequest.Name,
+                Price = productCreateRequest.Price,
+                Brand = (int)productCreateRequest.Brand,
+                Gender = (int)productCreateRequest.Gender,
+                Size = (int)productCreateRequest.Size,
+                ImagePath = string.Empty
+            };
+
+            if (productCreateRequest.ImageFile != null)
             {
-                if (ProductExists(product.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                product.ImagePath = await _fileStorageService.SaveFileAsync(productCreateRequest.ImageFile);
             }
 
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            _context.products.Add(product);
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProduct", 
+                                    new { id = product.Id }, 
+                                    new ProductViewModel 
+                                    {
+                                        Id = product.Id,
+                                        Name = product.Name
+                                    });
         }
 
         // DELETE: api/Products/5
