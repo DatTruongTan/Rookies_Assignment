@@ -46,10 +46,9 @@ namespace ServerBE.Controllers
         // GET: api/Products
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<PagedResponeDto<ProductDto>>> Getproducts(
+        public async Task<ActionResult<PagedResponseDto<ProductDto>>> Getproduct(
             [FromQuery] ProductCriteriaDto productCriteriaDto,
-            CancellationToken cancellationToken
-            )
+            CancellationToken cancellationToken)
         {
             var productQuery = _context
                                     .products
@@ -63,7 +62,7 @@ namespace ServerBE.Controllers
                                         .PaginateAsync(productCriteriaDto, cancellationToken);
 
             var productDto = _mapper.Map<IEnumerable<ProductDto>>(pageProducts.Items);
-            return new PagedResponeDto<ProductDto>
+            return new PagedResponseDto<ProductDto>
             {
                 CurrentPage = pageProducts.CurrentPage,
                 TotalPages = pageProducts.TotalPages,
@@ -124,7 +123,7 @@ namespace ServerBE.Controllers
                 Gender = product.Gender,
                 Size = product.Size,
                 Rating = product.Rating,
-                ImagePath = _fileStorageService.GetFileUrl(product.ImagePath)
+                ImagePath = _fileStorageService.GetFileUrl(product.ImageName)
             };
             return productViewModel;
         }
@@ -174,25 +173,27 @@ namespace ServerBE.Controllers
                 Brand = (int)productCreateRequest.Brand,
                 Gender = (int)productCreateRequest.Gender,
                 Size = (int)productCreateRequest.Size,
-                ImagePath = string.Empty
+                ImageName = string.Empty
             };
 
             if (productCreateRequest.ImageFile != null)
             {
-                product.ImagePath = await _fileStorageService.SaveFileAsync(productCreateRequest.ImageFile);
+                product.ImageName = await _fileStorageService.SaveFileAsync(productCreateRequest.ImageFile);
             }
 
             _context.products.Add(product);
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", 
+            return CreatedAtAction(nameof(GetProduct), 
                                     new { id = product.Id }, 
-                                    new ProductViewModel 
-                                    {
-                                        Id = product.Id,
-                                        Name = product.Name
-                                    });
+                                    //new ProductViewModel 
+                                    //{
+                                    //    Id = product.Id,
+                                    //    Name = product.Name
+                                    //}
+                                    product
+                                    );
         }
 
         // DELETE: api/Products/5
