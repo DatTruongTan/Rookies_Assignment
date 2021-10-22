@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.Dto
 {
-    public class PagedResponeDto<Tmodel> : BaseQueryCriteriaDto
+    public class PagedResponseDto<Tmodel> : BaseQueryCriteriaDto
     {
         public int CurrentPage { get; set; }
         public int TotalItems { get; set; }
