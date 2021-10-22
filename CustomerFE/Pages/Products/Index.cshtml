@@ -1,0 +1,118 @@
+﻿@page
+@model CustomerFE.Pages.Products.IndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="row">
+    @*FILTER*@
+    <div class="col-12 col-md-3">
+        <div id="filter-section">
+            <h3>Filter By Price</h3>
+            <hr />
+            <form>
+                <p>
+                    Title: <input type="text"/>
+                    <input type="submit" value="@Model.Products.Search" />
+                </p>
+                <div class="mb-3">
+                    <label for="min-price-input" class="form-label">Min Price</label>
+                    <input type="number"
+                           class="form-control"
+                           id="min-price-input" />
+                </div>
+                <div class="mb-3">
+                    <label for="max-price-input" class="form-label">Max Price</label>
+                    <input type="number"
+                           class="form-control"
+                           id="max-price-input" />
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    @*PRODUCT LIST*@
+    <div class="col-12 col-md-9">
+        <div class="row">
+            @foreach (var item in Model.Products.Items)
+            {
+                var iPhotoUrl = "/images/pegasus-trail-3-trail-running-shoes-zzBdpt.jpg";
+                <div class="col-12 col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="@iPhotoUrl" class="card-img-top" alt="Image">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Price</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!--<h2>Products</h2>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="SearchString" value="@Model.Products.Search" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="id"
+                   asp-route-currentFilter="@Model.Products.Search">
+                    @Html.DisplayNameFor(model => model.Products.Items.FirstOrDefault().Id)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products.Items.FirstOrDefault().Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>-->
+
+<!--@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.Products.SortOrder"
+   asp-route-pageIndex="@(Model.Products.Page - 1)"
+   asp-route-currentFilter="@Model.Products.Search"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.Products.SortOrder"
+   asp-route-pageIndex="@(Model.Products.Page + 1)"
+   asp-route-currentFilter="@Model.Products.Search"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>-->
