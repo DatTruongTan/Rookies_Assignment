@@ -15,7 +15,7 @@
             <form>
                 <p>
                     Title: <input type="text"/>
-                    <input type="submit" value="@Model.Products.Search" />
+                    <input type="submit" asp-route-currentFilter="@Model.Products.Search" value="@Model.Products.Search" />
                 </p>
                 <div class="mb-3">
                     <label for="min-price-input" class="form-label">Min Price</label>
@@ -40,15 +40,20 @@
             @foreach (var item in Model.Products.Items)
             {
                 var iPhotoUrl = "/images/pegasus-trail-3-trail-running-shoes-zzBdpt.jpg";
-                <div class="col-12 col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="@iPhotoUrl" class="card-img-top" alt="Image">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text">@item.Price</p>
+                <a asp-page="/Products/Details" asp-route-ID="@item.Id">
+                    <div class="col-12 col-md-4">
+                        <div class="card" style="width: 18rem;">
+                            <img src="@iPhotoUrl" class="card-img-top" alt="Image">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">@item.Price</p>
+
+
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
+                
             }
         </div>
     </div>

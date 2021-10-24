@@ -35,10 +35,9 @@ namespace CustomerFE.Pages.Products
         public PagedResponseVM<ProductViewModel> Products { get; set; }
         public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
         {
-            var _searchString = "abc";
             var productCriteriaDto = new ProductCriteriaDto()
             {
-                Search = _searchString,
+                Search = searchString,
                 SortOrder = SortingEnum.Accsending,
                 Page = pageIndex ?? 1,
                 //Limit = int.Parse(_configuration[ConstConfiguration.PAGING_LIMIT])
