@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CustomerFE.Models.Product>
+﻿@*@model IEnumerable<CustomerFE.Models.Product>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -31,7 +31,7 @@
 
 <div class="row">
     @*FILTER*@
-    <div class="col-12 col-md-3">
+    @*<div class="col-12 col-md-3">
         <div id="filter-section">
             <h3>Filter By Price</h3>
             <hr />
@@ -51,9 +51,10 @@
                 <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
-    </div>
+    </div>*@
+
     @*PRODUCT LIST*@
-    <div class="col-12 col-md-9">
+    @*<div class="col-12 col-md-9">
             <div class="row">
                 @foreach (var item in Model)
                 {
@@ -69,7 +70,7 @@
                     </div>
                 }
             </div>
-    </div>
+    </div>*@
 </div>    
 
 
