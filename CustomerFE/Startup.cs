@@ -1,4 +1,6 @@
+using CustomerFE.Extensions;
 using CustomerFE.Helper;
+using CustomerFE.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -55,11 +57,11 @@ namespace CustomerFE
                 });
             services.AddHttpContextAccessor();
             services.AddCustomHttpClient(Configuration);
-            //services.AddServices();
+            services.AddServices();
             services.AddRazorPages();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllersWithViews();
-            services.AddHttpClient();
+            //services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
