@@ -23,13 +23,16 @@ namespace CustomerFE.Helper
                                             .HttpContext
                                             .GetTokenAsync(ConstRequest.ACCESS_TOKEN);
 
-                client.BaseAddress = new Uri(config[ConstConfiguration.BACK_END_ENDPOINT]);
+                //client.BaseAddress = new Uri(config[ConstConfiguration.BACK_END_ENDPOINT]);
+
+                client.BaseAddress = new Uri("https://localhost:44373");
 
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(ConstRequest.BEARER, accessToken);
             });
 
             services.AddHttpClient(ConstService.BACK_END_NAMED_CLIENT, configureClient);
+            //services.AddHttpClient("ServerBE", configureClient);
         }
     }
 }
