@@ -42,7 +42,12 @@ namespace CustomerFE.Services
             var SortColumn = productCriteriaDto.SortColumn;
             var Page = productCriteriaDto.Page;
             var Limit = productCriteriaDto.Limit;
-
+            var Types = productCriteriaDto.Types;
+            string typeString = "Types=0";
+            foreach(var Type in Types)
+            {
+                typeString += Type;
+            }
             var queryString = $"Search={Search}&SortOrder={SortOrder}&SortColumn={SortColumn}&Limit={Limit}&Page={Page}";
             var response = await client
                 .GetAsync($"https://localhost:44373/api/Products?{queryString}");
