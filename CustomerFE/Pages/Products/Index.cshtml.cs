@@ -33,15 +33,16 @@ namespace CustomerFE.Pages.Products
         }
 
         public PagedResponseVM<ProductViewModel> Products { get; set; }
-        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(SortingEnum sortOrder, string currentFilter, string searchString, int? pageIndex, int? limit, int[] types)
         {
             var productCriteriaDto = new ProductCriteriaDto()
             {
                 Search = searchString,
-                SortOrder = SortingEnum.Accsending,
+                SortOrder = sortOrder,
+                SortColumn = currentFilter,
                 Page = pageIndex ?? 1,
-                //Limit = int.Parse(_configuration[ConstConfiguration.PAGING_LIMIT])
-                Limit = 9
+                Limit = limit ?? 9,
+                Types = types
             };
             var pagedProducts = await _productService.GetProductAsync(productCriteriaDto);
             Products = _mapper.Map<PagedResponseVM<ProductViewModel>>(pagedProducts);

@@ -14,23 +14,11 @@
             <hr />
             <form>
                 <p>
-                    Title: <input type="text"/>
-                    <input type="submit" asp-route-currentFilter="@Model.Products.Search" value="@Model.Products.Search" />
+                    Find: <input type="text" name="searchString" value="@Model.Products.Search" />
+                    <input type="submit" value="Search" />
                 </p>
-                <div class="mb-3">
-                    <label for="min-price-input" class="form-label">Min Price</label>
-                    <input type="number"
-                           class="form-control"
-                           id="min-price-input" />
-                </div>
-                <div class="mb-3">
-                    <label for="max-price-input" class="form-label">Max Price</label>
-                    <input type="number"
-                           class="form-control"
-                           id="max-price-input" />
-                </div>
-                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
+            <hr />
         </div>
     </div>
 
@@ -53,7 +41,7 @@
                         </div>
                     </div>
                 </a>
-                
+
             }
         </div>
     </div>
@@ -101,7 +89,6 @@
         }
     </tbody>
 </table>-->
-
 <!--@{
     var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
