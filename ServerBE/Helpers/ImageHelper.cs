@@ -12,7 +12,7 @@ namespace ServerBE.Helpers
         public static string GetFileUrl(string fileName)
         {
             var url = string.Empty;
-            if (!string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url))
             {
                 url = $"{GetImageUrl()}//{fileName}";
             }
