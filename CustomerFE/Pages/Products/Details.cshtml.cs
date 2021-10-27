@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CustomerFE.Services;
+using CustomerFE.ViewModel;
+using CustomerFE.ViewModel.Product;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +26,11 @@ namespace CustomerFE.Pages.Products
             _configuration = configuration;
             _mapper = mapper;
         }
-        public void OnGet(string id)
+        public ProductViewModel Products { get; set; }
+        public async Task OnGetAsync(string id)
         {
-            var productDetail = _productService.GetProductByIdAsync(id);
+            var productDetail = await _productService.GetProductByIdAsync(id);
+            Products = _mapper.Map<ProductViewModel>(productDetail);
         }
     }
 }
