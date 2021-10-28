@@ -12,17 +12,36 @@
     @*FILTER*@
     <div class="col-12 col-md-3">
         <div id="filter-section">
-            <h3>Filter By Price</h3>
             <hr />
-            <form>
-                <p>
-                    Find: <input type="text" name="searchString" value="@Model.Products.Search" />
-                    <input type="submit" value="Search" />
+            <nav class="navbar navbar-light bg-light">
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" name="searchString" value="@Model.Products.Search" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
                     <hr />
-                    <a class="btn btn-primary" asp-page="./Index">Show All</a>
-
-                </p>
-            </form>
+                    <a class="btn btn-primary mt-3" asp-page="./Index">Show All</a>
+                </form>
+            </nav>
+            
+            <div class="dropdown ml-3 mt-3">
+                <h3>Filter</h3>
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown button
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="?sortOrder=0&currentFilter=Name">
+                        A-Z
+                    </a>
+                    <a class="dropdown-item" href="?sortOrder=1&currentFilter=Name">
+                        Z-A
+                    </a>
+                    <a class="dropdown-item" href="?sortOrder=0&currentFilter=Price">
+                        Price <i class="fas fa-long-arrow-alt-up"></i>
+                    </a>
+                    <a class="dropdown-item" href="?sortOrder=1&currentFilter=Price">
+                        Price <i class="fas fa-long-arrow-alt-down"></i>
+                    </a>
+                </div>
+            </div>
             <hr />
         </div>
     </div>
@@ -39,8 +58,6 @@
                             <div class="card-body">
                                 <h5 class="card-title">@item.Name</h5>
                                 <p class="card-text">@item.Price</p>
-
-
                             </div>
                         </div>
                     </div>
