@@ -123,7 +123,9 @@ namespace ServerBE.Controllers
                 Gender = product.Gender,
                 Size = product.Size,
                 Rating = product.Rating,
-                ImagePath = _fileStorageService.GetFileUrl(product.ImageName)
+                //ImagePath = _fileStorageService.GetFileUrl(product.ImageName)
+                ImagePath = $"//images//{product.ImageName}"
+
             };
             return productViewModel;
         }
