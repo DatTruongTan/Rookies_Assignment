@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,6 +17,14 @@ namespace CustomerFE.ViewModel.Product
 
         public int Price { get; set; }
 
+        public int Brand { get; set; }
+        
+        public GenderEnum Gender { get; set; }
+        
+        public int Size { get; set; }
+        
+        public int Rating { get; set; }
+        
         public string ImagePath { get; set; }
     }
 }
