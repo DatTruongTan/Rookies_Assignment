@@ -17,6 +17,7 @@ namespace ServerBE.Data
         }
 
         public DbSet<Product> products { get; set; }
+        public DbSet<Rating> ratings { get; set; }
         
     }
 }
