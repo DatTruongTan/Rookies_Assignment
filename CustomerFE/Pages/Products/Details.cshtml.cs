@@ -35,17 +35,14 @@ namespace CustomerFE.Pages.Products
         }
 
         public ProductViewModel Products { get; set; }
-        public RatingViewModel Ratings { get; set; }
+        public List<RatingViewModel> Ratings { get; set; }
         public async Task OnGetAsync(/*RatingGetRequest request,*/ string id)
         {
             var productDetail = await _productService.GetProductByIdAsync(id);
             Products = _mapper.Map<ProductViewModel>(productDetail);
             var ratings = await _ratingService.GetAllAsync(/*request*/);
             var ratingProducts = ratings.FindAll(x => x.ProductId == productDetail.Id);
-            foreach(var ratingProduct in ratingProducts)
-            {
-                Ratings = _mapper.Map<RatingViewModel>(ratingProduct);
-            }
+            Ratings = _mapper.Map<List<RatingViewModel>>(ratingProducts);
         }
 
         public async Task OnPostAsync(/*RatingCreateRequest request,*/ int rating, string productId)
@@ -59,7 +56,7 @@ namespace CustomerFE.Pages.Products
             var ratings = await _ratingService.CreateAsync(ratingVM);
             var productDetail = await _productService.GetProductByIdAsync(productId);
             Products = _mapper.Map<ProductViewModel>(productDetail);
-            Ratings = _mapper.Map<RatingViewModel>(ratingVM);
+            Ratings = _mapper.Map<List<RatingViewModel>>(ratingVM);
         }
     }
 }

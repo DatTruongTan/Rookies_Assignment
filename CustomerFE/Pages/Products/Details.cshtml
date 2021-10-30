@@ -155,16 +155,24 @@
             <label for="star1" title="text">1 star</label>
         </div>
         <div>
-            <input type="text" name="TextComment"/>
-            <input type="text" name="ProductId" value="@Model.Products.Id" hidden/>
-            <input type="submit" value="submit" class="btn btn-primary"/>
+            @*<input type="text" name="TextComment"/>*@
+            <div class="form-group">
+                @*<label for="exampleFormControlTextarea1">Example textarea</label>*@
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="TextComment"></textarea>
+            </div>
+            <input type="text" name="ProductId" value="@Model.Products.Id" hidden />
+            <input type="submit" value="submit" class="btn btn-primary" />
         </div>
     </form>
 </div>
 <div class="row">
     <div>
-        <p>@Model.Ratings.RatingIndex</p>
-        <p>@Model.Ratings.TextComment</p>
+        @foreach (var item in Model.Ratings)
+        {
+            <p>@item.RatingIndex</p>
+            <p>@item.TextComment</p>
+        }
+
     </div>
 </div>
 <!--Section: Block Content-->
