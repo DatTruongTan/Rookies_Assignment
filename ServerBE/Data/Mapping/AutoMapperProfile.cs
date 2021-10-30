@@ -2,6 +2,7 @@
 using ServerBE.Helpers;
 using ServerBE.Models;
 using Shared.Dto.Product;
+using Shared.Dto.Rating;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace ServerBE.Data.Mapping
             CreateMap<Product, ProductDto>()
                 .ForMember(src => src.ImagePath,
                            options => options.MapFrom(src => ImageHelper.GetFileUrl(src.ImageName)));
+            CreateMap<Rating, RatingDto>();
         }
     }
 }
