@@ -21,7 +21,7 @@
                     <a class="btn btn-primary mt-3" asp-page="./Index">Show All</a>
                 </form>
             </nav>
-            
+
             <div class="dropdown ml-3 mt-3">
                 <h3>Filter</h3>
                 <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,6 +42,12 @@
                     </a>
                 </div>
             </div>
+            <form>
+                <input type="text" id="adidas" name="Types" value="0" />
+                <input type="radio" name="Types" onclick="document.getElementById('adidas').submit();" />
+                <input type="text" id="nike" name="Types" value="1" />
+                <input type="radio" name="Types" onclick="document.getElementById('nike').submit();" />
+            </form>
             <hr />
         </div>
     </div>
@@ -67,65 +73,3 @@
         </div>
     </div>
 </div>
-
-<!--<h2>Products</h2>
-
-<form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name:
-            <input type="text" name="SearchString" value="@Model.Products.Search" />
-            <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-page="./Index">Back to full List</a>
-        </p>
-    </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="id"
-                   asp-route-currentFilter="@Model.Products.Search">
-                    @Html.DisplayNameFor(model => model.Products.Items.FirstOrDefault().Id)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Products.Items.FirstOrDefault().Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products.Items)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>-->
-<!--@{
-    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
-}
-
-<a asp-page="./Index"
-   asp-route-sortOrder="@Model.Products.SortOrder"
-   asp-route-pageIndex="@(Model.Products.Page - 1)"
-   asp-route-currentFilter="@Model.Products.Search"
-   class="btn btn-primary @prevDisabled">
-    Previous
-</a>
-<a asp-page="./Index"
-   asp-route-sortOrder="@Model.Products.SortOrder"
-   asp-route-pageIndex="@(Model.Products.Page + 1)"
-   asp-route-currentFilter="@Model.Products.Search"
-   class="btn btn-primary @nextDisabled">
-    Next
-</a>-->
