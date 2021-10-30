@@ -7,6 +7,6 @@ namespace Shared.Constants
     public class ConstEndPoint
     {
         public static string GET_PRODUCTS = "api/products";
-
+        public static string GET_RATINGS = "api/ratings";
     }
 }
