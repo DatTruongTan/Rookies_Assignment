@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using ServerBE.Data;
 using Shared;
 using Shared.Constants;
 using Shared.Dto.Rating;
