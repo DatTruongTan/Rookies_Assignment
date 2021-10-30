@@ -18,6 +18,7 @@ using Shared.Constants;
 using Shared.Dto;
 using Shared.Dto.Product;
 using Shared.Enum;
+using Shared.ViewModels;
 
 namespace ServerBE.Controllers
 {
