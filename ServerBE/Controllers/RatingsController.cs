@@ -10,6 +10,7 @@ using ServerBE.Data;
 using ServerBE.Models;
 using ServerBE.Services;
 using Shared;
+using Shared.Dto.Rating;
 using Shared.ViewModels;
 
 namespace ServerBE.Controllers
@@ -35,9 +36,44 @@ namespace ServerBE.Controllers
 
         // GET: api/Ratings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rating>>> Getratings()
+        public async Task<List<RatingDto>> Getratings()
         {
-            return await _context.ratings.ToListAsync();
+            //var query = _context.products.AsQueryable();
+
+            //var query = from rt in _context.ratings
+            //            join p in _context.products on rt.ProductId equals p.Id into prt
+            //            from p in prt.DefaultIfEmpty()
+            //            select new { p, rt };
+            //if (!string.IsNullOrEmpty(request.ProductId))
+            //{
+            //    query = query.Where(p => p.Id == request.ProductId);
+            //}
+            //var queryList = await query.ToListAsync();
+
+            var query = from rt in _context.ratings
+                        select new { rt };
+            var comment = await query.Select(x => new RatingDto()
+            {
+                Id = x.rt.Id,
+                TextComment = x.rt.TextComment,
+                RatingIndex = x.rt.RatingIndex,
+                ProductId = x.rt.ProductId,
+                UserId = ""
+            }).ToListAsync();
+
+            return comment;
+
+            //var rating = _mapper.Map<RatingDto>(query);
+
+            //var data = new RatingDto
+            //{
+            //    Id = rating.Id,
+            //    TextComment = rating.TextComment,
+            //    RatingIndex = rating.RatingIndex,
+            //    ProductId = rating.ProductId
+            //};
+            //return data;
+            //return await _context.ratings.ToListAsync();
         }
 
         // GET: api/Ratings/5
