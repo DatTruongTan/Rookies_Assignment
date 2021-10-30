@@ -10,11 +10,17 @@
 @{
     ViewData["Title"] = "Details";
 }
-@*@{
+@{
+    var sum = 0;
+    var count = 0;
+    @foreach (var item in Model.Ratings)
+    {
+        sum += item.RatingIndex;
+        count++;
+    }
 
-    ProductViewModel Products = ViewData["Products"] as ProductViewModel;
-    RatingViewModel Ratings = ViewData["Ratings"] as RatingViewModel;
-}*@
+    var ratingStar = sum / count;
+}
 
 <!--Section: Block Content-->
 
@@ -38,17 +44,23 @@
 
         <h5>@Model.Products.Name</h5>
         <p class="mb-2 text-muted text-uppercase small">Sneaker</p>
-
-        @for (int i = 0; i < 5; i++)
-        {
-            <span><i class="fas fa-star fa-sm text-primary"></i></span>
-        }
+        <span>
+            @for (int i = 0; i < ratingStar; i++)
+            {
+                <i class="fas fa-star fa-sm text-primary"></i>
+            }
+            @for (int i = 0; i < 5 - ratingStar; i++)
+            {
+                <i class="fas fa-star fa-sm text-ouline-primary"></i>
+            }
+        </span>
+        
         <p><span class="mr-1"><strong>@Model.Products.Price VND</strong></span></p>
         @*<p class="pt-1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit
-            error voluptas repellat rerum quidem, soluta enim perferendis voluptates laboriosam. Distinctio,
-            officia quis dolore quos sapiente tempore alias.
-            </p>*@
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit
+        error voluptas repellat rerum quidem, soluta enim perferendis voluptates laboriosam. Distinctio,
+        officia quis dolore quos sapiente tempore alias.
+        </p>*@
         <div class="table-responsive">
             <table class="table table-sm table-borderless mb-0">
                 <tbody>
@@ -76,9 +88,9 @@
                         }
                     </tr>
                     @*<tr>
-                            <th class="pl-0 w-25" scope="row"><strong>Size</strong></th>
-                            <td>@Model.Products.Size</td>
-                        </tr>*@
+                        <th class="pl-0 w-25" scope="row"><strong>Size</strong></th>
+                        <td>@Model.Products.Size</td>
+                    </tr>*@
                 </tbody>
             </table>
         </div>
@@ -137,7 +149,7 @@
 @*<div class="row">
         <partial name="_Rating"/>
     </div>*@
-<div class="row">
+<div class="row mt-5 ml-5">
     <form method="post">
         @*<meta charset="UTF-8">*@
         @*<link rel="stylesheet" type="text/css" href="/css/Rating.css">*@
@@ -165,12 +177,73 @@
         </div>
     </form>
 </div>
-<div class="row">
+<div class="row mt-5 ml-5">
     <div>
         @foreach (var item in Model.Ratings)
         {
-            <p>@item.RatingIndex</p>
-            <p>@item.TextComment</p>
+            <div class="mb-5">
+                @{
+                    switch (item.RatingIndex)
+                    {
+                        case 1:
+                            <text>
+                                <span>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                </span>
+                            </text>
+                            break;
+                        case 2:
+                            <text>
+                                <span>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                </span>
+                            </text>
+                            break;
+                        case 3:
+                            <text>
+                                <span>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                </span>
+                            </text>
+                            break;
+                        case 4:
+                            <text>
+                                <span>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                                </span>
+                            </text>
+                            break;
+                        default:
+                            <text>
+                                <span>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                    <i class="fas fa-star fa-sm text-primary"></i>
+                                </span>
+                            </text>
+                            break;
+                    }
+                }
+                <p class="mt-2">@item.TextComment</p>
+            </div>
         }
 
     </div>
