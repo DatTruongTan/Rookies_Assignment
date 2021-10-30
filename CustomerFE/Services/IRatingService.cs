@@ -10,9 +10,9 @@ namespace CustomerFE.Services
 {
     public interface IRatingService
     {
-        Task<List<RatingViewModel>> GetAllAsync();
-        Task<List<RatingViewModel>> GetAllByProductIdAsync(RatingGetRequest request);
+        Task<List<RatingDto>> GetAllAsync();
+        Task<List<RatingDto>> GetAllByProductIdAsync(RatingGetRequest request);
         Task<string> CreateAsync(RatingDto ratingDto);
-        Task<RatingViewModel> GetByIdAsync(string id);
+        Task<RatingDto> GetByIdAsync(string id);
     }
 }

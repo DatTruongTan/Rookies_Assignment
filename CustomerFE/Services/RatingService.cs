@@ -34,43 +34,42 @@ namespace CustomerFE.Services
         {
             var client = _clientFactory.CreateClient(ConstService.BACK_END_NAMED_CLIENT);
 
-            //var request = await client
-            //    .PostAsync($"https://localhost:44373/api/Ratings", ratingDto);
-
-            //HttpClient client = new HttpClient();
-
             var jsonString = JsonConvert.SerializeObject(ratingDto);
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync(new Uri("https://localhost:44373/api/Ratings"), content);
+            var result = await client.PostAsync(new Uri($"{ConstEndPoint.GET_RATINGS}"), content);
 
             string resultContent = result.Content.ReadAsStringAsync().Result;
             return resultContent;
-            //var pagedProducts = await response.Content.ReadAsAsync<PagedResponseDto<ProductDto>>();
-            //return result;
         }
 
-        public async Task<List<RatingViewModel>> GetAllAsync()
+        public async Task<List<RatingDto>> GetAllAsync()
         {
             var client = _clientFactory.CreateClient(ConstService.BACK_END_NAMED_CLIENT);
             
-            var response = await client.GetAsync("https://localhost:44373/api/Ratings");
+            var response = await client.GetAsync($"{ConstEndPoint.GET_RATINGS}");
 
             response.EnsureSuccessStatusCode();
-            var ratingProducts = await response.Content.ReadAsAsync<List<RatingViewModel>>();
+            var ratingProducts = await response.Content.ReadAsAsync<List<RatingDto>>();
             return ratingProducts;
         }
 
-        public Task<List<RatingViewModel>> GetAllByProductIdAsync(RatingGetRequest request)
+        public async Task<List<RatingDto>> GetAllByProductIdAsync(RatingGetRequest request)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient(ConstService.BACK_END_NAMED_CLIENT);
+            var response = await client.GetAsync($"{ConstEndPoint.GET_RATINGS}");
+            response.EnsureSuccessStatusCode();
+            var Product = await response.Content.ReadAsAsync<List<RatingDto>>();
+            return Product;
         }   
 
-
-
-        public Task<RatingViewModel> GetByIdAsync(string id)
+        public async Task<RatingDto> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient(ConstService.BACK_END_NAMED_CLIENT);
+            var response = await client.GetAsync($"{ConstEndPoint.GET_RATINGS}\\{id}");
+            response.EnsureSuccessStatusCode();
+            var Product = await response.Content.ReadAsAsync<RatingDto>();
+            return Product;
         }
     }
 }
