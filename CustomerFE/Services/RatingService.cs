@@ -37,7 +37,7 @@ namespace CustomerFE.Services
             var jsonString = JsonConvert.SerializeObject(ratingDto);
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync(new Uri($"https://localhost:44373/{ConstEndPoint.GET_RATINGS}"), content);
+            var result = await client.PostAsync(new Uri($"https://localhost:5001/api/Ratings"), content);
 
             string resultContent = result.Content.ReadAsStringAsync().Result;
             return resultContent;

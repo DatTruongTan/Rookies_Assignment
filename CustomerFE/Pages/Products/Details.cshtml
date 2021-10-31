@@ -3,6 +3,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
+@using Shared.Constants
 @using Shared.Enum
 @using CustomerFE.ViewModel.Product;
 @using CustomerFE.ViewModel.Rating;
@@ -13,13 +14,17 @@
 @{
     var sum = 0;
     var count = 0;
+    var ratingStar = 0;
     @foreach (var item in Model.Ratings)
     {
         sum += item.RatingIndex;
         count++;
     }
-
-    var ratingStar = sum / count;
+    if(count != 0)
+    {
+        ratingStar = sum / count;
+    }
+    @*var ratingStar = sum / count;*@
 }
 
 <!--Section: Block Content-->
@@ -34,7 +39,7 @@
             <div class="row product-gallery mx-1">
 
                 <div class="col-12 mb-0">
-                    <img src="@("https://localhost:44373/" + Model.Products.ImagePath)" class="img-fluid z-depth-1" />
+                    <img src="@("https://localhost:4001/" + Model.Products.ImagePath)" class="img-fluid z-depth-1" />
                 </div>
             </div>
         </div>
@@ -44,17 +49,30 @@
 
         <h5>@Model.Products.Name</h5>
         <p class="mb-2 text-muted text-uppercase small">Sneaker</p>
-        <span>
-            @for (int i = 0; i < ratingStar; i++)
-            {
-                <i class="fas fa-star fa-sm text-primary"></i>
-            }
-            @for (int i = 0; i < 5 - ratingStar; i++)
-            {
-                <i class="fas fa-star fa-sm text-ouline-primary"></i>
-            }
-        </span>
-        
+        @if (ratingStar != 0)
+        {
+            <span>
+                @for (int i = 0; i < ratingStar; i++)
+                {
+                    <i class="fas fa-star fa-sm text-primary"></i>
+                }
+                @for (int i = 0; i < 5 - ratingStar; i++)
+                {
+                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                }
+            </span>
+        }
+        else
+        {
+            <span>
+                @for (int i = 0; i < 5; i++)
+                {
+                    <i class="fas fa-star fa-sm text-ouline-primary"></i>
+                }
+            </span>
+        }
+
+
         <p><span class="mr-1"><strong>@Model.Products.Price VND</strong></span></p>
         @*<p class="pt-1">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit
@@ -173,7 +191,9 @@
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="TextComment"></textarea>
             </div>
             <input type="text" name="ProductId" value="@Model.Products.Id" hidden />
-            <input type="submit" value="submit" class="btn btn-primary" />
+            <a href=@("https://localhost:4001/" + "Products/Details?ID=" + Model.Products.Id)>
+                <input type="submit" value="submit" class="btn btn-primary" />
+            </a>
         </div>
     </form>
 </div>
@@ -245,7 +265,6 @@
                 <p class="mt-2">@item.TextComment</p>
             </div>
         }
-
     </div>
 </div>
 <!--Section: Block Content-->

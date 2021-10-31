@@ -25,7 +25,7 @@ namespace CustomerFE.Helper
 
                 //client.BaseAddress = new Uri(config[ConstConfiguration.BACK_END_ENDPOINT]);
 
-                client.BaseAddress = new Uri("https://localhost:44373");
+                client.BaseAddress = new Uri("https://localhost:5001/");
 
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(ConstRequest.BEARER, accessToken);

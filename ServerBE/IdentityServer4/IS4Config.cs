@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Shared.Constants;
 
 namespace ServerBE.IdentityServer4
 {
@@ -40,9 +41,9 @@ namespace ServerBE.IdentityServer4
                         new Secret("secret".Sha256())
                     },
 
-                    RedirectUris = { "https://localhost:44343/signin-oidc" },
+                    RedirectUris = { "https://localhost:4001/" + "signin-oidc" },
 
-                    PostLogoutRedirectUris = { "https://localhost:44343/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:4001/" + "signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
@@ -61,9 +62,9 @@ namespace ServerBE.IdentityServer4
                         RequireConsent = false,
                         RequirePkce = true,
 
-                        RedirectUris =           { $"https://localhost:44343/swagger/oauth2-redirect.html" },
-                        PostLogoutRedirectUris = { $"https://localhost:44343/swagger/oauth2-redirect.html" },
-                        AllowedCorsOrigins =     { $"https://localhost:44343" },
+                        RedirectUris =           { $"https://localhost:4001/swagger/oauth2-redirect.html" },
+                        PostLogoutRedirectUris = { $"https://localhost:4001/swagger/oauth2-redirect.html" },
+                        AllowedCorsOrigins =     { $"https://localhost:4001" },
 
                         AllowedScopes = new List<string>
                         {

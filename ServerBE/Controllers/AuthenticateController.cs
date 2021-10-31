@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServerBE.Models;
 using ServerBE.Models.Auth;
+using Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,7 +60,7 @@ namespace ServerBE.Controllers
 
             if (button.Equals("cancel"))
             {
-                return Redirect("https://localhost:44343/");
+                return Redirect("https://localhost:4001/");
             }
 
             if (!ModelState.IsValid)
@@ -106,7 +107,7 @@ namespace ServerBE.Controllers
             {
                 await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                return Redirect("https://localhost:44343/");
+                return Redirect("https://localhost:4001/");
             }
 
             var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);

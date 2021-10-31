@@ -40,13 +40,16 @@ namespace CustomerFE.Pages.Products
         {
             var productDetail = await _productService.GetProductByIdAsync(id);
             Products = _mapper.Map<ProductViewModel>(productDetail);
-            var ratings = await _ratingService.GetAllAsync(/*request*/);
+            var ratings = await _ratingService.GetAllAsync();
             var ratingProducts = ratings.FindAll(x => x.ProductId == productDetail.Id);
             Ratings = _mapper.Map<List<RatingViewModel>>(ratingProducts);
         }
 
         public async Task OnPostAsync(/*RatingCreateRequest request,*/ int rating, string productId)
         {
+            var productDetail = await _productService.GetProductByIdAsync(productId);
+            Products = _mapper.Map<ProductViewModel>(productDetail);
+
             var ratingVM = new RatingDto()
             {
                 TextComment = Request.Form["TextComment"],
@@ -54,9 +57,9 @@ namespace CustomerFE.Pages.Products
                 ProductId = Request.Form["ProductId"]
             };
             var ratings = await _ratingService.CreateAsync(ratingVM);
-            var productDetail = await _productService.GetProductByIdAsync(productId);
-            Products = _mapper.Map<ProductViewModel>(productDetail);
-            Ratings = _mapper.Map<List<RatingViewModel>>(ratingVM);
+            var getRatings = await _ratingService.GetAllAsync();
+            var ratingProducts = getRatings.FindAll(x => x.ProductId == productDetail.Id);
+            Ratings = _mapper.Map<List<RatingViewModel>>(ratingProducts);
         }
     }
 }
