@@ -57,39 +57,72 @@ namespace ServerBE.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(/*[FromBody]*/ SignUpModel signUpModel, string button)
         {
+            var returnUrl = signUpModel.ReturnUrl.Split('=');
+            var role = returnUrl[1].Split('&');
 
-            if (button.Equals("cancel"))
+            if (role[0] == "client")
             {
-                return Redirect("https://localhost:4001/");
+                if (button.Equals("cancel"))
+                {
+                    return Redirect("https://localhost:4001/");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View("Sign Up", signUpModel);
+                }
+
+                var user = new User()
+                {
+                    UserName = signUpModel.Username,
+                    Email = signUpModel.Email,
+                };
+
+                var result = await _userManager.CreateAsync(user, signUpModel.Password);
+
+                if (!result.Succeeded)
+                {
+                    return View("SignUp", signUpModel);
+                }
+                await _userManager.AddToRoleAsync(user, "User");
+
+                await _signInManager.SignInAsync(user, false);
+
+                //return Redirect(signUpModel.ReturnUrl);
             }
-
-            if (!ModelState.IsValid)
+            else
             {
-                return View("Sign Up", signUpModel);
+                if (button.Equals("cancel"))
+                {
+                    return Redirect("http://localhost:3000/");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View("Sign Up", signUpModel);
+                }
+
+                var admin = new User()
+                {
+                    UserName = signUpModel.Username,
+                    Email = signUpModel.Email,
+                };
+
+                var result = await _userManager.CreateAsync(admin, signUpModel.Password);
+
+                if (!result.Succeeded)
+                {
+                    return View("SignUp", signUpModel);
+                }
+                await _userManager.AddToRoleAsync(admin, "Admin");
+
+                await _signInManager.SignInAsync(admin, false);
+
+                //return Redirect(signUpModel.ReturnUrl);
             }
-
-            var user = new User()
-            {
-                UserName = signUpModel.Username,
-                Email = signUpModel.Email,
-            };
-
-            var result = await _userManager.CreateAsync(user, signUpModel.Password);
-
-            if (!result.Succeeded)
-            {
-                return View("SignUp", signUpModel);
-
-                //return Content("Signed Up Unsuccesfully!!!");
-
-            }
-            //return Ok(result.Succeeded);
-
-            await _userManager.AddToRoleAsync(user, "User");
-
-            await _signInManager.SignInAsync(user, false);
 
             return Redirect(signUpModel.ReturnUrl);
+
         }
 
         [HttpGet]
@@ -101,29 +134,55 @@ namespace ServerBE.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(/*[FromBody]*/ SignInModel signInModel, string button)
         {
-            var context = await _interaction.GetAuthorizationContextAsync(signInModel.ReturnUrl);
+            var returnUrl = signInModel.ReturnUrl.Split('=');
+            var role = returnUrl[1].Split('&');
 
-            if (button.Equals("cancel"))
+            if(role[0] == "client")
             {
-                await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+                var context = await _interaction.GetAuthorizationContextAsync(signInModel.ReturnUrl);
 
-                return Redirect("https://localhost:4001/");
+                if (button.Equals("cancel"))
+                {
+                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+
+                    return Redirect("https://localhost:4001/");
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
+
+                if (!result.Succeeded)
+                {
+                    ViewBag.Error = "Invalid Username or Password";
+                    return View("SignIn", signInModel);
+                }
+
+                ViewBag.Error = null;
+
+                return Redirect(signInModel.ReturnUrl);
             }
-
-            var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
-
-            if (!result.Succeeded)
+            else
             {
-                //return Content("Invalid Username or Password!!!");
-                ViewBag.Error = "Invalid Username or Password";
-                return View("SignIn", signInModel);
+                var context = await _interaction.GetAuthorizationContextAsync(signInModel.ReturnUrl);
+
+                if (button.Equals("cancel"))
+                {
+                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+
+                    return Redirect("http://localhost:3000/");
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
+
+                if (!result.Succeeded)
+                {
+                    ViewBag.Error = "Invalid Username or Password";
+                    return View("SignIn", signInModel);
+                }
+
+                ViewBag.Error = null;
+
+                return Redirect(signInModel.ReturnUrl);
             }
-
-            //return Ok(result);
-
-            ViewBag.Error = null;
-
-            return Redirect(signInModel.ReturnUrl);
         }
 
         [HttpGet]
