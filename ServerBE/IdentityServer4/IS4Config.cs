@@ -72,7 +72,61 @@ namespace ServerBE.IdentityServer4
                             IdentityServerConstants.StandardScopes.Profile,
                             "shoppingAPI"
                         }
+                    },
+
+                new Client {
+                    ClientName = "admin",
+                    ClientId = "admin",
+                    // AccessTokenType = AccessTokenType.Reference,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireClientSecret = false,
+                    RequireConsent = false,
+                    // RequirePkce = true,
+                    AlwaysSendClientClaims = true,
+                    AllowOfflineAccess = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+
+                    RedirectUris = new List<string>
+                    {
+                        "http://localhost:3000/authentication/login-callback",
+                        "http://localhost:3000/silent-renew.html",
+                        "http://localhost:3000"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "http://localhost:3000/authentication/logout-callback",
+                        "http://localhost:3000/unauthorized",
+                        "http://localhost:3000"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "http://localhost:3000"
+                    },
+                    //RedirectUris = new List<string>
+                    //{
+                    //    "http://localhost:3001/authentication/login-callback",
+                    //    "http://localhost:3001/silent-renew.html",
+                    //    "http://localhost:3001"
+                    //},
+                    //PostLogoutRedirectUris = new List<string>
+                    //{
+                    //    "http://localhost:3001/authentication/logout-callback",
+                    //    "http://localhost:3001/unauthorized",
+                    //    "http://localhost:3001"
+                    //},
+                    //AllowedCorsOrigins = new List<string>
+                    //{
+                    //    "http://localhost:3001"
+                    //},
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "shoppingAPI",
                     }
+                }
             };
     }
 }
