@@ -134,32 +134,47 @@ namespace ServerBE.Controllers
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(string id, Product product)
+        public async Task<IActionResult> PutProduct([FromRoute] string id,[FromForm] ProductCreateRequest productCreateRequest)
         {
-            if (id != product.Id)
+            var product = await _context.products.FindAsync(id);
+
+            if (product == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            product.Name = productCreateRequest.Name;
+            product.Price = productCreateRequest.Price;
+            product.Brand = (int)productCreateRequest.Brand;
+            product.Gender = (int)productCreateRequest.Gender;
+            product.Size = (int)productCreateRequest.Size;
+            //product.ImageName = productCreateRequest.ImageFile;
 
-            try
+            if (productCreateRequest.ImageFile != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                product.ImageName = await _fileStorageService.SaveFileAsync(productCreateRequest.ImageFile);
             }
 
-            return NoContent();
+            _context.products.Update(product);
+            await _context.SaveChangesAsync();
+
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!ProductExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
+            return Ok(product);
         }
 
         // POST: api/Products
@@ -209,10 +224,10 @@ namespace ServerBE.Controllers
                 return NotFound();
             }
 
-            _context.products.Remove(product);
+            product.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(true);
         }
 
         private bool ProductExists(string id)
