@@ -127,12 +127,23 @@ namespace ServerBE
 
             services.AddRazorPages();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             //services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowOrigins",
             //        builder =>
             //        {
-            //            builder.WithOrigins("http://localhost:3000")
+            //            builder.WithOrigins("http://localhost:3001")
             //                .AllowAnyHeader()
             //                .AllowAnyMethod();
             //        });
@@ -158,7 +169,7 @@ namespace ServerBE
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            //app.UseCors("AllowOrigins");
+            app.UseCors("AllowOrigins");
 
             app.UseRouting();
 
