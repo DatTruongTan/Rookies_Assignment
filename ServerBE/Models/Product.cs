@@ -18,5 +18,6 @@ namespace ServerBE.Models
         public int Rating { get; set; }
         public string ImageName { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -148,6 +148,7 @@ namespace ServerBE.Controllers
             product.Brand = (int)productCreateRequest.Brand;
             product.Gender = (int)productCreateRequest.Gender;
             product.Size = (int)productCreateRequest.Size;
+            product.CreatedDate = DateTime.Now;
             //product.ImageName = productCreateRequest.ImageFile;
 
             if (productCreateRequest.ImageFile != null)
@@ -191,7 +192,8 @@ namespace ServerBE.Controllers
                 Brand = (int)productCreateRequest.Brand,
                 Gender = (int)productCreateRequest.Gender,
                 Size = (int)productCreateRequest.Size,
-                ImageName = string.Empty
+                ImageName = string.Empty,
+                CreatedDate = DateTime.Now
             };
 
             if (productCreateRequest.ImageFile != null)
@@ -224,10 +226,10 @@ namespace ServerBE.Controllers
                 return NotFound();
             }
 
-            product.IsDeleted = true;
+            _context.products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return Ok(true);
+            return NoContent();
         }
 
         private bool ProductExists(string id)

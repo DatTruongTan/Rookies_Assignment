@@ -16,5 +16,6 @@ namespace Shared
         public GenderEnum Gender { get; set; }
         public SizeEnum Size { get; set; }
         public IFormFile ImageFile { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
