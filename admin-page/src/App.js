@@ -1,24 +1,31 @@
 import './App.css';
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { CREATE_BRAND, HOME } from './Constants/pages';
+
+import CreateProduct from './Components/Create';
+import ListProduct from './Components/List';
+// const CreateProduct = lazy(() => import('.Components/Create'));
+// const ListProduct = lazy(() => import('.Components/List'));
+// const UpdateProduct = lazy(() => import('./Update'));
 
 function App() {
-    const [product, setProduct] = useState(null);
-
-    useEffect(() => {
-        axios.get('https://localhost:5001/api/products').then((response) => {
-            console.log(response.data.items);
-            setProduct(response.data.items);
-        });
-    }, []);
-
-    if (!product) return null;
-
     return (
-        <div className="App">
+        <div className="">
             <h1>WELCOME!!!</h1>
-            <p>{product.map((p) => p.name)}</p>
-            <p>{product.map((p) => p.price)}</p>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path={HOME}>
+                        <ListProduct />
+                    </Route>
+                    <Route exact path={CREATE_BRAND}>
+                        <CreateProduct />
+                    </Route>
+                    {/* <Route exact path={EDIT_BRAND}>
+                    <UpdateBrand />
+                </Route>  */}
+                </Switch>
+            </BrowserRouter>
         </div>
     );
 }
