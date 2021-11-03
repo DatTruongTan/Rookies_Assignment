@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { POST_ADD_PRODUCT } from '../../Services/apiService';
@@ -28,20 +27,6 @@ const CreateProduct = () => {
                 console.log(error);
                 console.log(formData);
             });
-
-        // axios
-        //     .post(process.env.REACT_APP_BACKEND_API, formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data',
-        //         },
-        //     })
-        //     .then((response) => {
-        //         console.log('respone here -', response);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error.message);
-        //         console.log('error here -', formData);
-        //     });
     };
 
     return (
@@ -53,7 +38,6 @@ const CreateProduct = () => {
                         <Form.Control
                             type="text"
                             placeholder="Enter product's name"
-                            value={formValue.Name}
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
@@ -68,7 +52,6 @@ const CreateProduct = () => {
                         <Form.Control
                             type="text"
                             placeholder="Enter product's price'"
-                            value={formValue.Price}
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
@@ -84,7 +67,6 @@ const CreateProduct = () => {
                         <Form.Label>Brand</Form.Label>
                         <Form.Select
                             defaultValue="Choose..."
-                            value={formValue.Brand}
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
@@ -102,7 +84,6 @@ const CreateProduct = () => {
                         <Form.Label>Gender</Form.Label>
                         <Form.Select
                             defaultValue="Choose..."
-                            value={formValue.Gender}
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
@@ -120,7 +101,6 @@ const CreateProduct = () => {
                         <Form.Label>Size</Form.Label>
                         <Form.Select
                             defaultValue="Choose..."
-                            value={formValue.Size}
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
@@ -137,30 +117,13 @@ const CreateProduct = () => {
                     </Form.Group>
                 </Row>
 
-                <Form.Group
-                    controlId="formFile"
-                    className="mb-3"
-                    // value={formValue.ImageName}
-                    // onChange={({ target }) =>
-                    //     setformValue((state) => ({
-                    //         ...state,
-                    //         ImageName: target.files,
-                    //     }))
-                    // }
-                >
+                <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Image</Form.Label>
                     <Form.Control
                         type="file"
-                        // defaultValue={imageName}
                         onChange={(event) =>
                             setImageName(event.target.files[0])
                         }
-                        // onChange={({ target }) =>
-                        //     setformValue((state) => ({
-                        //         ...state,
-                        //         ImageName: target.files,
-                        //     }))
-                        // }
                     />
                 </Form.Group>
 
