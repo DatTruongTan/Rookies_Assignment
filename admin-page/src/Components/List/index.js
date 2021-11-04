@@ -16,17 +16,21 @@ import {
 const ListProduct = () => {
     const [product, setProduct] = useState(null);
     const [isDeleted, setIsDeleted] = useState(false);
-    const [query, setQuery] = useState({
-        page: 1,
-        limit: DEFAULT_PAGE_LIMIT,
-        sortOrder: DECSENDING,
-        sortColumn: DEFAULT_BRAND_SORT_COLUMN_NAME,
-    });
+    const [query, setQuery] = useState(
+        {
+            page: 1,
+            limit: DEFAULT_PAGE_LIMIT,
+            sortOrder: DECSENDING,
+            sortColumn: DEFAULT_BRAND_SORT_COLUMN_NAME,
+        },
+        []
+    );
 
     const handleDeleteProduct = (id) => {
         DELETE_PRODUCT_ID(id)
             .then((response) => {
                 console.log('Deleted Product -', response);
+                setProduct(product.filter((p) => p.id !== id));
             })
             .catch((err) => {
                 console.log(err);
@@ -38,7 +42,7 @@ const ListProduct = () => {
             setProduct(response.data.items);
             console.log(response.data.items);
         });
-    }, [product]);
+    }, []);
 
     if (!product) return null;
     return (
