@@ -15,6 +15,7 @@ import {
 
 const ListProduct = () => {
     const [product, setProduct] = useState(null);
+    const [isDeleted, setIsDeleted] = useState(false);
     const [query, setQuery] = useState({
         page: 1,
         limit: DEFAULT_PAGE_LIMIT,
@@ -22,44 +23,22 @@ const ListProduct = () => {
         sortColumn: DEFAULT_BRAND_SORT_COLUMN_NAME,
     });
 
+    const handleDeleteProduct = (id) => {
+        DELETE_PRODUCT_ID(id)
+            .then((response) => {
+                console.log('Deleted Product -', response);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     useEffect(() => {
         GET_ALL_PRODUCTS().then((response) => {
             setProduct(response.data.items);
             console.log(response.data.items);
         });
-        // axios
-        //     .get(process.env.REACT_APP_BACKEND_URL + Endpoints.products)
-        //     .then((response) => {
-        //         setProduct(response.data.items);
-        //     });
-    }, []);
-
-    const handleDeleteProduct = (event, id) => {
-        product.map((p) => p.id);
-        event.preventDefault();
-        axios
-            .delete(`${process.env.REACT_APP_BACKEND_API}/${id}`)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((err) => {
-                console.log('message: ' + err.message);
-            });
-        // DELETE_PRODUCT_ID(product.id).then((response) => {
-        //     console.log('Deleted Product -', response).catch((err) => {
-        //         console.log(err);
-        //     });
-        // });
-    };
-
-    // useEffect(() => {
-    //     async function fetchDataAsync() {
-    //         let result = await getBrandsRequest(query);
-    //         setProduct(result.data);
-    //     }
-
-    //     fetchDataAsync();
-    // }, [query, product]);
+    }, [product]);
 
     if (!product) return null;
     return (
@@ -92,33 +71,17 @@ const ListProduct = () => {
                                 />
                             </td>
                             <td>
-                                {/* <Button variant="primary" type="submit">
-                                    Edit
-                                </Button> */}
                                 <Link
-                                    // to="/edit/:${id}"
                                     to={`/edit/${p.id}`}
-                                    // UpdateProduct={p.id}
                                     type="button"
                                     className="btn btn-primary"
                                 >
                                     Edit
                                 </Link>
-                                {/* <Link
-                                    // to="/edit/:${id}"
-                                    to="/delete"
-                                    // UpdateProduct={p.id}
-                                    type="button"
-                                    className="btn btn-danger"
-                                >
-                                    Delete
-                                </Link> */}
                                 <Button
                                     variant="danger"
                                     type="submit"
-                                    onClick={(event) =>
-                                        handleDeleteProduct(event)
-                                    }
+                                    onClick={() => handleDeleteProduct(p.id)}
                                 >
                                     Delete
                                 </Button>
