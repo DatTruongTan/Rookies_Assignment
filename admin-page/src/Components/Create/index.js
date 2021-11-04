@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { POST_ADD_PRODUCT } from '../../Services/apiService';
 
 const CreateProduct = () => {
     const [formValue, setformValue] = useState({});
+    const [checkAdd, setCheckAdd] = useState(false);
     const [imageName, setImageName] = useState(null);
 
     const handleSubmit = (event) => {
@@ -22,12 +23,17 @@ const CreateProduct = () => {
             .then((response) => {
                 console.log('This is response -', response);
                 console.log('This is request -', formData);
+                setCheckAdd(true);
             })
             .catch((error) => {
                 console.log(error);
                 console.log(formData);
             });
     };
+
+    if (checkAdd) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <div>
