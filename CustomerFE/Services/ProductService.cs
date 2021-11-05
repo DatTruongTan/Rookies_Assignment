@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared;
@@ -36,21 +37,23 @@ namespace CustomerFE.Services
         public async Task<PagedResponseDto<ProductDto>> GetProductAsync(ProductCriteriaDto productCriteriaDto)
         {
             var client = _clientFactory.CreateClient(ConstService.BACK_END_NAMED_CLIENT);
-
+            
             var Search = productCriteriaDto.Search;
             var SortOrder = productCriteriaDto.SortOrder;
             var SortColumn = productCriteriaDto.SortColumn;
             var Page = productCriteriaDto.Page;
             var Limit = productCriteriaDto.Limit;
-            var Types = productCriteriaDto.Types;
-            string typeString = "Types=0";
-            foreach(var Type in Types)
+
+            var Types = "0";
+            for(int i = 0; i < productCriteriaDto.Types.Length; i++)
             {
-                typeString += Type;
+                Types += $"&Types={productCriteriaDto.Types[i]}";
             }
-            var queryString = $"Search={Search}&SortOrder={SortOrder}&SortColumn={SortColumn}&Limit={Limit}&Page={Page}";
+
+            var queryString = $"Search={Search}&Types={Types}&SortOrder={SortOrder}&SortColumn={SortColumn}&Limit={Limit}&Page={Page}";
             var response = await client
                 .GetAsync($"https://localhost:5001/api/Products?{queryString}");
+
             //.GetAsync($"{ConstConfiguration.BACK_END_ENDPOINT}/{ConstEndPoint.GET_PRODUCTS}?{queryString}");
 
             response.EnsureSuccessStatusCode();

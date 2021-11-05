@@ -74,7 +74,6 @@ namespace ServerBE.Controllers
                 Limit = productCriteriaDto.Limit,
                 Items = productDto
             };
-            //return await _context.products.ToListAsync();
         }
 
         #region Private Method
@@ -88,12 +87,13 @@ namespace ServerBE.Controllers
                     b.Name.Contains(productCriteriaDto.Search));
             }
 
-            if (productCriteriaDto.Types != null &&
-                productCriteriaDto.Types.Count() > 0 &&
-               !productCriteriaDto.Types.Any(x => x == (int)BrandEnum.All))
+            for(int i = 0; i < productCriteriaDto.Types.Length; i++)
             {
-                productQuery = productQuery.Where(x =>
+                if(productCriteriaDto.Types[i] != 0)
+                {
+                    productQuery = productQuery.Where(x =>
                     productCriteriaDto.Types.Any(t => t == x.Brand));
+                }
             }
 
             return productQuery;
@@ -149,7 +149,6 @@ namespace ServerBE.Controllers
             product.Gender = (int)productCreateRequest.Gender;
             product.Size = (int)productCreateRequest.Size;
             product.CreatedDate = DateTime.Now;
-            //product.ImageName = productCreateRequest.ImageFile;
 
             if (productCreateRequest.ImageFile != null)
             {
@@ -158,22 +157,6 @@ namespace ServerBE.Controllers
 
             _context.products.Update(product);
             await _context.SaveChangesAsync();
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!ProductExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
 
             return Ok(product);
         }
@@ -207,11 +190,6 @@ namespace ServerBE.Controllers
 
             return CreatedAtAction(nameof(GetProduct), 
                                     new { id = product.Id }, 
-                                    //new ProductViewModel 
-                                    //{
-                                    //    Id = product.Id,
-                                    //    Name = product.Name
-                                    //}
                                     product
                                     );
         }
