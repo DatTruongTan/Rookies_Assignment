@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { Redirect, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { POST_ADD_PRODUCT } from '../../Services/apiService';
+import { createProductRequest } from '../services/request';
+import { HOME } from '../../Constants/pages';
 
 const CreateProduct = () => {
     const [formValue, setformValue] = useState({});
-    const [checkAdd, setCheckAdd] = useState(false);
     const [imageName, setImageName] = useState(null);
+    let history = useHistory();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,21 +21,17 @@ const CreateProduct = () => {
         formData.append('Size', formValue.Size);
         formData.append('ImageFile', imageName);
 
-        POST_ADD_PRODUCT(formData)
+        createProductRequest(formData)
             .then((response) => {
                 console.log('This is response -', response);
                 console.log('This is request -', formData);
-                setCheckAdd(true);
+                history.push(HOME);
             })
             .catch((error) => {
                 console.log(error);
                 console.log(formData);
             });
     };
-
-    if (checkAdd) {
-        return <Redirect to="/" />;
-    }
 
     return (
         <div>
