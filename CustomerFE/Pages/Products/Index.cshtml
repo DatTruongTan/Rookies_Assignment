@@ -13,6 +13,7 @@
     <div class="col-12 col-md-3">
         <div id="filter-section">
             <hr />
+            @*SEARCH*@
             <nav class="navbar navbar-light bg-light">
                 <form class="form-inline">
                     <input class="form-control mr-sm-2" type="search" name="searchString" value="@Model.Products.Search" placeholder="Search..." aria-label="Search">
@@ -21,7 +22,8 @@
                     <a class="btn btn-primary mt-3" asp-page="./Index">Show All</a>
                 </form>
             </nav>
-
+            <hr />
+            @*SORT*@
             <div class="dropdown ml-3 mt-3">
                 <h3>Filter</h3>
                 <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,11 +44,23 @@
                     </a>
                 </div>
             </div>
-            <form>
-                <input type="text" id="adidas" name="Types" value="0" />
-                <input type="radio" name="Types" onclick="document.getElementById('adidas').submit();" />
-                <input type="text" id="nike" name="Types" value="1" />
-                <input type="radio" name="Types" onclick="document.getElementById('nike').submit();" />
+            <hr />
+            @*CATEGORY*@
+            <form class="ml-3 mt-3" method="get">
+                <h3>Category</h3>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="types" id="exampleRadios1" value="1">
+                    <label class="form-check-label" for="exampleRadios1">
+                        Nike
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="types" id="exampleRadios2" value="2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        Adidas
+                    </label>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Submit" />
             </form>
             <hr />
         </div>
