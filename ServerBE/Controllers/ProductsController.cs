@@ -87,12 +87,15 @@ namespace ServerBE.Controllers
                     b.Name.Contains(productCriteriaDto.Search));
             }
 
-            for(int i = 0; i < productCriteriaDto.Types.Length; i++)
+            if(productCriteriaDto.Types != null)
             {
-                if(productCriteriaDto.Types[i] != 0)
+                for(int i = 0; i < productCriteriaDto.Types.Length; i++)
                 {
-                    productQuery = productQuery.Where(x =>
-                    productCriteriaDto.Types.Any(t => t == x.Brand));
+                    if(productCriteriaDto.Types[i] != 0)
+                    {
+                        productQuery = productQuery.Where(x =>
+                        productCriteriaDto.Types.Any(t => t == x.Brand));
+                    }
                 }
             }
 
