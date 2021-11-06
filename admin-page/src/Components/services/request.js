@@ -4,36 +4,30 @@ import qs from 'qs';
 import RequestService from '../../Services/request';
 import EndPoints from '../../Constants/endpoints';
 
-export function createBrandRequest(brandForm) {
-    const formData = new FormData();
-
-    Object.keys(brandForm).forEach((key) => {
-        formData.append(key, brandForm[key]);
-    });
-
-    return RequestService.axios.post(EndPoints.brand, formData);
+export function createProductRequest(Form) {
+    return RequestService.axios.post(EndPoints.products, Form);
 }
 
-export function getBrandsRequest(query) {
-    return axios.get(EndPoints.brand, {
+export function getProductsRequest(query) {
+    return RequestService.axios.get(EndPoints.products, {
         params: query,
         paramsSerializer: (params) => qs.stringify(params),
     });
 }
 
-export function UpdateBrandRequest(brandForm) {
+export function UpdateProductRequest(Form) {
     const formData = new FormData();
 
-    Object.keys(brandForm).forEach((key) => {
-        formData.append(key, brandForm[key]);
+    Object.keys(Form).forEach((key) => {
+        formData.append(key, Form[key]);
     });
 
     return RequestService.axios.put(
-        EndPoints.brandId(brandForm.id ?? -1),
+        EndPoints.productsId(Form.id ?? -1),
         formData
     );
 }
 
-export function DisableBrandRequest(brandId) {
-    return RequestService.axios.delete(EndPoints.brandId(brandId));
+export function DeleteProductRequest(id) {
+    return RequestService.axios.delete(EndPoints.productsId(id));
 }

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Table, Button } from 'react-bootstrap';
+import { Search } from 'react-feather';
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import { FilterBrandTypeOptions } from '../../Constants/selectOptions';
+import ProductTable from './Table';
 import { Link } from 'react-router-dom';
-import Endpoints from '../../Constants/endpoints';
-import { getBrandsRequest } from '../services/request';
-import UpdateProduct from '../Update';
-import { GET_ALL_PRODUCTS, DELETE_PRODUCT_ID } from '../../Services/apiService';
+import { getProductsRequest } from '../services/request';
 import {
     ACCSENDING,
     DECSENDING,
@@ -15,7 +14,7 @@ import {
 
 const ListProduct = () => {
     const [product, setProduct] = useState(null);
-    const [isDeleted, setIsDeleted] = useState(false);
+    const [search, setSearch] = useState('');
     const [query, setQuery] = useState(
         {
             page: 1,
@@ -26,74 +25,139 @@ const ListProduct = () => {
         []
     );
 
-    const handleDeleteProduct = (id) => {
-        DELETE_PRODUCT_ID(id)
-            .then((response) => {
-                console.log('Deleted Product -', response);
-                setProduct(product.filter((p) => p.id !== id));
-            })
-            .catch((err) => {
-                console.log(err);
+    const [selectedType, setSelectedType] = useState([
+        { id: 1, label: 'All', value: 0 },
+    ]);
+
+    const handleType = (selected) => {
+        if (selected.length === 0) {
+            setQuery({
+                ...query,
+                types: [],
             });
+
+            setSelectedType([FilterBrandTypeOptions[0]]);
+            return;
+        }
+
+        const selectedAll = selected.find((item) => item.id === 1);
+
+        setSelectedType((prevSelected) => {
+            if (!prevSelected.some((item) => item.id === 1) && selectedAll) {
+                setQuery({
+                    ...query,
+                    types: [],
+                });
+
+                return [selectedAll];
+            }
+
+            const newSelected = selected.filter((item) => item.id !== 1);
+            const types = newSelected.map((item) => item.value);
+
+            setQuery({
+                ...query,
+                types,
+            });
+
+            return newSelected;
+        });
+    };
+
+    const handleChangeSearch = (e) => {
+        e.preventDefault();
+
+        const search = e.target.value;
+        setSearch(search);
+    };
+
+    const handlePage = (page) => {
+        setQuery({
+            ...query,
+            page,
+        });
+    };
+
+    const handleSearch = () => {
+        setQuery({
+            ...query,
+            search,
+        });
+    };
+
+    const handleSort = (sortColumn) => {
+        const sortOrder =
+            query.sortOrder === ACCSENDING ? DECSENDING : ACCSENDING;
+
+        setQuery({
+            ...query,
+            sortColumn,
+            sortOrder,
+        });
+    };
+
+    const fetchDataCallbackAsync = async () => {
+        let data = await getProductsRequest(query);
+        console.log('fetchDataCallbackAsync');
+        console.log(data);
+        setProduct(data);
     };
 
     useEffect(() => {
-        GET_ALL_PRODUCTS().then((response) => {
-            setProduct(response.data.items);
-            console.log(response.data.items);
-        });
-    }, []);
+        async function fetchDataAsync() {
+            let result = await getProductsRequest(query);
+            setProduct(result.data);
+        }
 
-    if (!product) return null;
+        fetchDataAsync();
+    }, [query, product]);
+
     return (
         <div>
-            <Link to="/create" type="button" className="btn btn-success">
-                Create new Brand
-            </Link>
-            <Table striped bordered hover responsive>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Created Date</th>
-                        <th>Image</th>
-                        <th>Function</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {product.map((p) => (
-                        <tr>
-                            <td>{p.name}</td>
-                            <td>{p.price}</td>
-                            <td>{p.createdDate}</td>
-                            <td>
-                                <img
-                                    src={`${process.env.REACT_APP_BACKEND_URL}${p.imagePath}`}
-                                    alt="product"
-                                    height="50"
-                                    width="50"
-                                />
-                            </td>
-                            <td>
-                                <Link
-                                    to={`/edit/${p.id}`}
-                                    type="button"
-                                    className="btn btn-primary"
-                                >
-                                    Edit
-                                </Link>
-                                <Button
-                                    variant="danger"
-                                    type="submit"
-                                    onClick={() => handleDeleteProduct(p.id)}
-                                >
-                                    Delete
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <div className="container d-flex mb-3 intro-x">
+                <div className="d-flex align-items-center w-md mr-5">
+                    <ReactMultiSelectCheckboxes
+                        options={FilterBrandTypeOptions}
+                        hideSearch={true}
+                        placeholderButtonLabel="Type"
+                        value={selectedType}
+                        onChange={handleType}
+                    />
+                </div>
+                <div className="d-flex align-items-center w-ld ml-auto">
+                    <div className="input-group">
+                        <input
+                            onChange={handleChangeSearch}
+                            value={search}
+                            type="text"
+                            className="form-control"
+                        />
+                        <span
+                            onClick={handleSearch}
+                            className="border p-2 pointer"
+                        >
+                            <Search />
+                        </span>
+                    </div>
+                </div>
+                <Link
+                    to="/create"
+                    type="button"
+                    className="btn btn-success ms-3"
+                >
+                    Create new Product
+                </Link>
+            </div>
+            <ProductTable
+                products={product}
+                handlePage={handlePage}
+                handleSort={handleSort}
+                sortState={{
+                    columnValue: query.sortColumn,
+                    orderBy: query.sortOrder,
+                }}
+                fetchData={fetchDataCallbackAsync}
+            />
         </div>
     );
 };
