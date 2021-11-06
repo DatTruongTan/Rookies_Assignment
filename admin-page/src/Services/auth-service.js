@@ -4,7 +4,6 @@ import { CallBackEndpoints, UrlBackEnd } from '../Constants/oidc-config';
 
 const oidcSettings = {
     authority: UrlBackEnd,
-    // authority: 'http://localhost:5001/',
     client_id: 'admin',
     redirect_uri: CallBackEndpoints.redirect_uri,
     post_logout_redirect_uri: CallBackEndpoints.post_logout_redirect_uri,
