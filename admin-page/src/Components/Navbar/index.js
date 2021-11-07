@@ -42,9 +42,18 @@ const NavBar = () => {
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div
-                        class="d-flex justify-content-end align-items-center collapse navbar-collapse"
+                        class="d-flex justify-content-between align-items-center collapse navbar-collapse"
                         id="navbarNav"
                     >
+                        <div class="navbar-nav">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/user"
+                            >
+                                Users
+                            </a>
+                        </div>
                         <ul class="d-flex align-items-center navbar-nav">
                             <li class="nav-item me-3">{userName}</li>
                             <li class="nav-item">

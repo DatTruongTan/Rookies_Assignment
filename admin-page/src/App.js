@@ -4,13 +4,14 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {
     CREATE_PRODUCT,
     EDIT_PRODUCT,
-    EDIT_PRODUCT_ID,
+    USER,
     AUTH,
     HOME,
 } from './Constants/pages';
 
 import CreateProduct from './Components/Create';
 import ListProduct from './Components/List';
+import ListUser from './Components/Customer';
 import UpdateProduct from './Components/Update';
 import Auth from './Components/Auth/Auth';
 import NavBar from './Components/Navbar';
@@ -23,6 +24,7 @@ function App() {
             <BrowserRouter>
                 <Switch>
                     <Route exact path={HOME} component={ListProduct} />
+                    <Route exact path={USER} component={ListUser} />
                     <Route path={AUTH} component={Auth} />
                     <Route
                         exact
