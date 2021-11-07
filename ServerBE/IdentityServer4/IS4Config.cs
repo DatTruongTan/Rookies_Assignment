@@ -103,22 +103,6 @@ namespace ServerBE.IdentityServer4
                     {
                         "http://localhost:3000"
                     },
-                    //RedirectUris = new List<string>
-                    //{
-                    //    "http://localhost:3001/authentication/login-callback",
-                    //    "http://localhost:3001/silent-renew.html",
-                    //    "http://localhost:3001"
-                    //},
-                    //PostLogoutRedirectUris = new List<string>
-                    //{
-                    //    "http://localhost:3001/authentication/logout-callback",
-                    //    "http://localhost:3001/unauthorized",
-                    //    "http://localhost:3001"
-                    //},
-                    //AllowedCorsOrigins = new List<string>
-                    //{
-                    //    "http://localhost:3001"
-                    //},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
