@@ -15,6 +15,13 @@ export function getProductsRequest(query) {
     });
 }
 
+export function getCustomersRequest(query) {
+    return RequestService.axios.get(EndPoints.users, {
+        params: query,
+        paramsSerializer: (params) => qs.stringify(params),
+    });
+}
+
 export function UpdateProductRequest(Form) {
     const formData = new FormData();
 
