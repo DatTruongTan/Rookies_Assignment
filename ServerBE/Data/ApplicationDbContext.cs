@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ServerBE.Data.SeedData;
 using ServerBE.Models;
 
 namespace ServerBE.Data
@@ -16,8 +18,14 @@ namespace ServerBE.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedData();
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<Product> products { get; set; }
         public DbSet<Rating> ratings { get; set; }
-        
+        public DbSet<Category> categories { get; set; }
     }
 }

@@ -53,7 +53,6 @@ namespace ServerBE.Controllers
         {
             var productQuery = _context
                                     .products
-                                    .Where(x => !x.IsDeleted)
                                     .AsQueryable();
 
             productQuery = ProductFilter(productQuery, productCriteriaDto);
@@ -110,7 +109,6 @@ namespace ServerBE.Controllers
         {
             var product = await _context
                                     .products
-                                    .Where(x => !x.IsDeleted && x.Id == id)
                                     .FirstOrDefaultAsync();
 
             if (product == null)
