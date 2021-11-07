@@ -1,24 +1,10 @@
-﻿using IdentityModel;
-using IdentityServer4.Events;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using ServerBE.Models;
 using ServerBE.Models.Auth;
 using Shared.Constants;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ServerBE.Controllers
@@ -64,7 +50,7 @@ namespace ServerBE.Controllers
             {
                 if (button.Equals("cancel"))
                 {
-                    return Redirect("https://localhost:4001/");
+                    return Redirect(ConstantUri.SERVER_SITE_URL);
                 }
 
                 if (!ModelState.IsValid)
@@ -92,7 +78,7 @@ namespace ServerBE.Controllers
             {
                 if (button.Equals("cancel"))
                 {
-                    return Redirect("http://localhost:3000/");
+                    return Redirect(ConstantUri.ADMIN_PAGE_URL);
                 }
 
                 if (!ModelState.IsValid)
@@ -141,7 +127,7 @@ namespace ServerBE.Controllers
                 {
                     await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                    return Redirect("https://localhost:4001/");
+                    return Redirect(ConstantUri.CUSTOMER_SITE_URL);
                 }
 
                 var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
@@ -162,7 +148,7 @@ namespace ServerBE.Controllers
                 {
                     await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                    return Redirect("http://localhost:3000/");
+                    return Redirect(ConstantUri.ADMIN_PAGE_URL);
                 }
 
                 var result = await _signInManager.PasswordSignInAsync(signInModel.Username, signInModel.Password, false, false);
