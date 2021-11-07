@@ -87,8 +87,6 @@ namespace ServerBE.Controllers
                 await _userManager.AddToRoleAsync(user, "User");
 
                 await _signInManager.SignInAsync(user, false);
-
-                //return Redirect(signUpModel.ReturnUrl);
             }
             else
             {
@@ -117,8 +115,6 @@ namespace ServerBE.Controllers
                 await _userManager.AddToRoleAsync(admin, "Admin");
 
                 await _signInManager.SignInAsync(admin, false);
-
-                //return Redirect(signUpModel.ReturnUrl);
             }
 
             return Redirect(signUpModel.ReturnUrl);
@@ -157,8 +153,6 @@ namespace ServerBE.Controllers
                 }
 
                 ViewBag.Error = null;
-
-                return Redirect(signInModel.ReturnUrl);
             }
             else
             {
@@ -180,9 +174,8 @@ namespace ServerBE.Controllers
                 }
 
                 ViewBag.Error = null;
-
-                return Redirect(signInModel.ReturnUrl);
             }
+            return Redirect(signInModel.ReturnUrl);
         }
 
         [HttpGet]
@@ -194,36 +187,5 @@ namespace ServerBE.Controllers
 
             return Redirect(logoutRequest.PostLogoutRedirectUri);
         }
-
-        //[HttpPost]
-        //[Route("register-admin")]
-        //public async Task<IActionResult> RegisterAdmin([FromBody] SignUpModel model)
-        //{
-        //    var userExists = await userManager.FindByNameAsync(model.Username);
-        //    if (userExists != null)
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
-        //    User user = new User()
-        //    {
-        //        Email = model.Email,
-        //        SecurityStamp = Guid.NewGuid().ToString(),
-        //        UserName = model.Username
-        //    };
-        //    var result = await userManager.CreateAsync(user, model.Password);
-        //    if (!result.Succeeded)
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-
-        //    if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
-        //        await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-        //    if (!await roleManager.RoleExistsAsync(UserRoles.User))
-        //        await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
-
-        //    if (await roleManager.RoleExistsAsync(UserRoles.Admin))
-        //    {
-        //        await userManager.AddToRoleAsync(user, UserRoles.Admin);
-        //    }
-
-        //    return Ok(new Response { Status = "Success", Message = "User created successfully!" });
-        //}
     }
 }
