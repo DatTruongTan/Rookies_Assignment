@@ -132,22 +132,11 @@ namespace ServerBE
                 options.AddPolicy("AllowOrigins",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins(ConstantUri.ADMIN_PAGE_URL)
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
             });
-
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowOrigins",
-            //        builder =>
-            //        {
-            //            builder.WithOrigins("http://localhost:3001")
-            //                .AllowAnyHeader()
-            //                .AllowAnyMethod();
-            //        });
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

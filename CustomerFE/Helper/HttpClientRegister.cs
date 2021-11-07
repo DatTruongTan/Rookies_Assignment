@@ -23,9 +23,7 @@ namespace CustomerFE.Helper
                                             .HttpContext
                                             .GetTokenAsync(ConstRequest.ACCESS_TOKEN);
 
-                //client.BaseAddress = new Uri(config[ConstConfiguration.BACK_END_ENDPOINT]);
-
-                client.BaseAddress = new Uri("https://localhost:5001/");
+                client.BaseAddress = new Uri(ConstantUri.SERVER_SITE_URL);
 
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(ConstRequest.BEARER, accessToken);

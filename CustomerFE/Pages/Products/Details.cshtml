@@ -3,8 +3,8 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
-@using Shared.Constants
-@using Shared.Enum
+@using Shared.Constants;
+@using Shared.Enum;
 @using CustomerFE.ViewModel.Product;
 @using CustomerFE.ViewModel.Rating;
 
@@ -39,7 +39,7 @@
             <div class="row product-gallery mx-1">
 
                 <div class="col-12 mb-0">
-                    <img src="@("https://localhost:4001/" + Model.Products.ImagePath)" class="img-fluid z-depth-1" />
+                    <img src="@(ConstantUri.SERVER_SITE_URL + Model.Products.ImagePath)" class="img-fluid z-depth-1" />
                 </div>
             </div>
         </div>
@@ -164,14 +164,8 @@
         </button>
     </div>
 </div>
-@*<div class="row">
-        <partial name="_Rating"/>
-    </div>*@
 <div class="row mt-5 ml-5">
     <form method="post">
-        @*<meta charset="UTF-8">*@
-        @*<link rel="stylesheet" type="text/css" href="/css/Rating.css">*@
-        @*<title>Star rating using pure CSS</title>*@
         <div class="rate">
             <input type="radio" id="star5" name="rating" value="5" />
             <label for="star5" title="text">5 stars</label>
@@ -185,13 +179,11 @@
             <label for="star1" title="text">1 star</label>
         </div>
         <div>
-            @*<input type="text" name="TextComment"/>*@
             <div class="form-group">
-                @*<label for="exampleFormControlTextarea1">Example textarea</label>*@
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="TextComment"></textarea>
             </div>
             <input type="text" name="ProductId" value="@Model.Products.Id" hidden />
-            <a href=@("https://localhost:4001/" + "Products/Details?ID=" + Model.Products.Id)>
+            <a href=@(ConstantUri.CUSTOMER_SITE_URL + "Products/Details?ID=" + Model.Products.Id)>
                 <input type="submit" value="submit" class="btn btn-primary" />
             </a>
         </div>

@@ -41,9 +41,9 @@ namespace ServerBE.IdentityServer4
                         new Secret("secret".Sha256())
                     },
 
-                    RedirectUris = { "https://localhost:4001/" + "signin-oidc" },
+                    RedirectUris = { ConstantUri.CUSTOMER_SITE_URL + "signin-oidc" },
 
-                    PostLogoutRedirectUris = { "https://localhost:4001/" + "signout-callback-oidc" },
+                    PostLogoutRedirectUris = { ConstantUri.CUSTOMER_SITE_URL + "signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
@@ -62,9 +62,9 @@ namespace ServerBE.IdentityServer4
                         RequireConsent = false,
                         RequirePkce = true,
 
-                        RedirectUris =           { $"https://localhost:4001/swagger/oauth2-redirect.html" },
-                        PostLogoutRedirectUris = { $"https://localhost:4001/swagger/oauth2-redirect.html" },
-                        AllowedCorsOrigins =     { $"https://localhost:4001" },
+                        RedirectUris =           { $"{ConstantUri.CUSTOMER_SITE_URL}swagger/oauth2-redirect.html" },
+                        PostLogoutRedirectUris = { $"{ConstantUri.CUSTOMER_SITE_URL}swagger/oauth2-redirect.html" },
+                        AllowedCorsOrigins =     { ConstantUri.CUSTOMER_SITE_URL },
 
                         AllowedScopes = new List<string>
                         {
@@ -89,19 +89,19 @@ namespace ServerBE.IdentityServer4
 
                     RedirectUris = new List<string>
                     {
-                        "http://localhost:3000/authentication/login-callback",
-                        "http://localhost:3000/silent-renew.html",
-                        "http://localhost:3000"
+                        $"{ ConstantUri.ADMIN_PAGE_URL }/authentication/login-callback",
+                        $"{ ConstantUri.ADMIN_PAGE_URL }/silent-renew.html",
+                        ConstantUri.ADMIN_PAGE_URL
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "http://localhost:3000/authentication/logout-callback",
-                        "http://localhost:3000/unauthorized",
-                        "http://localhost:3000"
+                        $"{ ConstantUri.ADMIN_PAGE_URL }/authentication/logout-callback",
+                        $"{ ConstantUri.ADMIN_PAGE_URL }/unauthorized",
+                        ConstantUri.ADMIN_PAGE_URL
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "http://localhost:3000"
+                        ConstantUri.ADMIN_PAGE_URL
                     },
                     AllowedScopes = new List<string>
                     {

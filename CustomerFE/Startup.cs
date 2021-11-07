@@ -36,7 +36,7 @@ namespace CustomerFE
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://localhost:5001/";
+                    options.Authority = ConstantUri.SERVER_SITE_URL;
                     options.RequireHttpsMetadata = false;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
