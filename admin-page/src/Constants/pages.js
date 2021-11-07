@@ -1,6 +1,7 @@
 export const LOGIN = '/login';
 export const AUTH = '/authentication/:action';
 export const HOME = '/';
+export const USER = '/user';
 
 export const CREATE_PRODUCT = '/create';
 export const EDIT_PRODUCT = '/edit/:id';
