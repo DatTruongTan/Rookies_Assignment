@@ -52,7 +52,7 @@ namespace CustomerFE.Services
 
             var queryString = $"Search={Search}&Types={Types}&SortOrder={SortOrder}&SortColumn={SortColumn}&Limit={Limit}&Page={Page}";
             var response = await client
-                .GetAsync($"{ConstantUri.SERVER_SITE_URL}api/Products?{queryString}");
+                .GetAsync($"{ConstantUri.SERVER_SITE_URL}{ConstEndPoint.GET_PRODUCTS}?{queryString}");
 
             //.GetAsync($"{ConstConfiguration.BACK_END_ENDPOINT}/{ConstEndPoint.GET_PRODUCTS}?{queryString}");
 
