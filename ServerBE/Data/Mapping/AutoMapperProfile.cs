@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ServerBE.Helpers;
 using ServerBE.Models;
+using Shared.Dto.Category;
 using Shared.Dto.Product;
 using Shared.Dto.Rating;
 using System;
@@ -18,6 +19,7 @@ namespace ServerBE.Data.Mapping
                 .ForMember(src => src.ImagePath,
                            options => options.MapFrom(src => ImageHelper.GetFileUrl(src.ImageName)));
             CreateMap<Rating, RatingDto>();
+            CreateMap<Category, CategoryDto>();
         }
     }
 }

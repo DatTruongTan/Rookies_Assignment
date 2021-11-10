@@ -5,7 +5,7 @@
 @using Shared.Constants;
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Index";
 }
 
 <div class="row">
@@ -48,20 +48,33 @@
             @*CATEGORY*@
             <form class="ml-3 mt-3" method="get">
                 <h3>Category</h3>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="types" id="exampleRadios1" value="1">
-                    <label class="form-check-label" for="exampleRadios1">
-                        Nike
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="types" id="exampleRadios2" value="2">
-                    <label class="form-check-label" for="exampleRadios2">
-                        Adidas
-                    </label>
-                </div>
+                @foreach (var item in Model.Category)
+                {
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="types" id="exampleRadios1" value="@item.Id">
+                        <label class="form-check-label" for="exampleRadios1">
+                            @item.Name
+                        </label>
+                    </div>
+                }
                 <input class="btn btn-primary" type="submit" value="Submit" />
             </form>
+            @*<form class="ml-3 mt-3" method="get">
+            <h3>Category</h3>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="types" id="exampleRadios1" value="1">
+                <label class="form-check-label" for="exampleRadios1">
+                    Nike
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="types" id="exampleRadios2" value="2">
+                <label class="form-check-label" for="exampleRadios2">
+                    Adidas
+                </label>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Submit" />
+        </form>*@
             <hr />
         </div>
     </div>

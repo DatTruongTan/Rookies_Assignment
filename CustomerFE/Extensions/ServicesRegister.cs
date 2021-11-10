@@ -13,6 +13,7 @@ namespace CustomerFE.Extensions
         {
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IRatingService, RatingService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
     }
 }

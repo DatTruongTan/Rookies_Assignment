@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
-namespace ServerBE.Models
+namespace Shared.Dto.Category
 {
-    public class Category
+    public class CategoryDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

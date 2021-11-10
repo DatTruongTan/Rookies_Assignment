@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CustomerFE.Services;
 using CustomerFE.ViewModel;
+using CustomerFE.ViewModel.Category;
 using CustomerFE.ViewModel.Product;
 using CustomerFE.ViewModel.Rating;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,7 @@ namespace CustomerFE.Pages.Products
 
         public ProductViewModel Products { get; set; }
         public List<RatingViewModel> Ratings { get; set; }
+        public CategoryViewModel Category { get; set; }
         public async Task OnGetAsync(/*RatingGetRequest request,*/ string id)
         {
             var productDetail = await _productService.GetProductByIdAsync(id);

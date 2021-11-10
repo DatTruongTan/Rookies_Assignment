@@ -45,7 +45,7 @@ namespace CustomerFE.Services
             var Limit = productCriteriaDto.Limit;
 
             var Types = "0";
-            for(int i = 0; i < productCriteriaDto.Types.Length; i++)
+            for (int i = 0; i < productCriteriaDto.Types.Length; i++)
             {
                 Types += $"&Types={productCriteriaDto.Types[i]}";
             }
@@ -53,8 +53,6 @@ namespace CustomerFE.Services
             var queryString = $"Search={Search}&Types={Types}&SortOrder={SortOrder}&SortColumn={SortColumn}&Limit={Limit}&Page={Page}";
             var response = await client
                 .GetAsync($"{ConstantUri.SERVER_SITE_URL}{ConstEndPoint.GET_PRODUCTS}?{queryString}");
-
-            //.GetAsync($"{ConstConfiguration.BACK_END_ENDPOINT}/{ConstEndPoint.GET_PRODUCTS}?{queryString}");
 
             response.EnsureSuccessStatusCode();
             var pagedProducts = await response.Content.ReadAsAsync<PagedResponseDto<ProductDto>>();

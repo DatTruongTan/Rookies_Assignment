@@ -10,17 +10,14 @@ namespace ServerBE.Models
     public class Product
     {
         public string Id { get; set; }
-        public string CategoryId { get; set; }
-        public Category Category { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public string Description { get; set; }
-        public int Brand { get; set; }
+        public string CategoryId { get; set; }
         public int Gender { get; set; }
         public int Size { get; set; }
         public int Rating { get; set; }
         public string ImageName { get; set; }
-        //public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

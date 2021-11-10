@@ -10,38 +10,64 @@ namespace ServerBE.Data.SeedData
     {
         public static void SeedData(this ModelBuilder modelBuilder)
         {
+            var NikeId = Guid.NewGuid().ToString();
+            var AdidasId = Guid.NewGuid().ToString();
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = NikeId,
+                    Name = "Nike",
+                    Description = "USA brand",
+                },
+                new Category
+                {
+                    Id = AdidasId,
+                    Name = "Adidas",
+                    Description = "German brand",
+                }
+            );
+
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
                     Id = Guid.NewGuid().ToString(),
+                    CategoryId = AdidasId,
                     Name = "Adidas 1",
                     Description = "Good Shoes for good runner",
                     Price = 3400000,
                     Gender = (int)GenderEnum.Male,
                     Size = (int)SizeEnum.Size39,
-                    Brand = (int)BrandEnum.Adidas
+                    //Brand = (int)BrandEnum.Adidas,
+                    CreatedDate = DateTime.Now
                 },
                 new Product
                 {
                     Id = Guid.NewGuid().ToString(),
+                    CategoryId = NikeId,
                     Name = "Nike 2",
                     Description = "Good Shoes for good runner",
                     Price = 3400000,
                     Gender = (int)GenderEnum.Male,
                     Size = (int)SizeEnum.Size40,
-                    Brand = (int)BrandEnum.Adidas
+                    //Brand = (int)BrandEnum.Adidas,
+                    CreatedDate = DateTime.Now
                 },
                 new Product
                 {
                     Id = Guid.NewGuid().ToString(),
+                    CategoryId = AdidasId,
                     Name = "Adidas 3",
                     Description = "Good Shoes for good runner",
                     Price = 3400000,
                     Gender = (int)GenderEnum.Female,
                     Size = (int)SizeEnum.Size39,
-                    Brand = (int)BrandEnum.Adidas
+                    //Brand = (int)BrandEnum.Adidas,
+                    CreatedDate = DateTime.Now
                 }
             );
+
+            //var roleId = Guid.NewGuid().ToString();
+            //var adminId = Guid.NewGuid().ToString();
             modelBuilder.Entity<Role>().HasData(
                 new Role
                 {
@@ -82,6 +108,13 @@ namespace ServerBE.Data.SeedData
                     PasswordHash = hash.HashPassword(null, "Admin1^^"),
                 }
             );
+
+            //modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(
+            //    new IdentityUserRole<Guid>
+            //    {
+            //        RoleId = roleId,
+            //        UserId = adminId
+            //    });
         }
     }
 }

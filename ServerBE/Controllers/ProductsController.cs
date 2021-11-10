@@ -16,6 +16,7 @@ using ServerBE.Services;
 using Shared;
 using Shared.Constants;
 using Shared.Dto;
+using Shared.Dto.Category;
 using Shared.Dto.Product;
 using Shared.Enum;
 using Shared.ViewModels;
@@ -86,14 +87,14 @@ namespace ServerBE.Controllers
                     b.Name.Contains(productCriteriaDto.Search));
             }
 
-            if(productCriteriaDto.Types != null)
+            if (productCriteriaDto.Types != null)
             {
-                for(int i = 0; i < productCriteriaDto.Types.Length; i++)
+                for (int i = 0; i < productCriteriaDto.Types.Length; i++)
                 {
-                    if(productCriteriaDto.Types[i] != 0)
+                    if (productCriteriaDto.Types[i] != "0")
                     {
                         productQuery = productQuery.Where(x =>
-                        productCriteriaDto.Types.Any(t => t == x.Brand));
+                        productCriteriaDto.Types.Any(t => t == x.CategoryId));
                     }
                 }
             }
@@ -121,7 +122,7 @@ namespace ServerBE.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
-                Brand = product.Brand,
+                CategoryId = product.CategoryId,
                 Gender = product.Gender,
                 Size = product.Size,
                 Rating = product.Rating,
@@ -146,7 +147,7 @@ namespace ServerBE.Controllers
 
             product.Name = productCreateRequest.Name;
             product.Price = productCreateRequest.Price;
-            product.Brand = (int)productCreateRequest.Brand;
+            product.CategoryId = productCreateRequest.CategoryId;
             product.Gender = (int)productCreateRequest.Gender;
             product.Size = (int)productCreateRequest.Size;
             product.CreatedDate = DateTime.Now;
@@ -173,7 +174,7 @@ namespace ServerBE.Controllers
                 Id = Guid.NewGuid().ToString(),
                 Name = productCreateRequest.Name,
                 Price = productCreateRequest.Price,
-                Brand = (int)productCreateRequest.Brand,
+                CategoryId = productCreateRequest.CategoryId,
                 Gender = (int)productCreateRequest.Gender,
                 Size = (int)productCreateRequest.Size,
                 ImageName = string.Empty,

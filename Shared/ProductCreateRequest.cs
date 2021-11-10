@@ -12,7 +12,8 @@ namespace Shared
         [Required]
         public string Name { get; set; }
         public int Price { get; set; }
-        public BrandEnum Brand { get; set; }
+        public string CategoryId { get; set; }
+        public string Description { get; set; }
         public GenderEnum Gender { get; set; }
         public SizeEnum Size { get; set; }
         public IFormFile ImageFile { get; set; }

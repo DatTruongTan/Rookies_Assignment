@@ -17,8 +17,10 @@ namespace CustomerFE.ViewModel.Product
 
         public int Price { get; set; }
 
-        public int Brand { get; set; }
-        
+        public string CategoryId { get; set; }
+
+        //public int Brand { get; set; }
+
         public GenderEnum Gender { get; set; }
         
         public int Size { get; set; }

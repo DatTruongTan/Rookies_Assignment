@@ -10,4 +10,10 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Dto\Category\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dto\Category\" />
+  </ItemGroup>
 </Project>
