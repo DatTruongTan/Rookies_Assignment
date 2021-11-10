@@ -6,8 +6,8 @@ const Endpoints = {
     productsId: (id) => `api/products/${id}`,
     users: '/api/user',
     usersId: (id) => `/api/user/${id}`,
-    category: '/api/user',
-    categoryId: (id) => `/api/user/${id}`,
+    category: '/api/category',
+    categoryId: (id) => `/api/category/${id}`,
 };
 
 export default Endpoints;

@@ -8,8 +8,13 @@ import {
     AUTH,
     HOME,
     CATEGORY,
+    CREATE_CATEGORY,
+    EDIT_CATEGORY,
 } from './Constants/pages';
 
+import ListCategory from './Components/Category/index';
+import CreateCategory from './Components/Category/Create';
+import UpdateCategory from './Components/Category/Update';
 import CreateProduct from './Components/Create';
 import ListProduct from './Components/List';
 import ListUser from './Components/Customer';
@@ -35,8 +40,18 @@ function App() {
                     />
                     <Route
                         exact
+                        path={CREATE_CATEGORY}
+                        component={CreateCategory}
+                    />
+                    <Route
+                        exact
                         path={EDIT_PRODUCT}
                         component={UpdateProduct}
+                    />
+                    <Route
+                        exact
+                        path={EDIT_CATEGORY}
+                        component={UpdateCategory}
                     />
                 </Switch>
             </BrowserRouter>
