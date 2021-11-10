@@ -8,8 +8,11 @@ import {
     PUT_EDIT_PRODUCT,
 } from '../../Services/apiService';
 
+import { GET_ALL_CATEGORY } from '../../Services/CategoryApiService';
+
 export default function UpdateProduct({ match, location }) {
     const history = useHistory();
+    const [category, setCategory] = useState(null);
     const [productID, setProductID] = useState(null);
     const [name, setName] = useState(null);
     const [price, setPrice] = useState(null);
@@ -30,10 +33,22 @@ export default function UpdateProduct({ match, location }) {
                 setProductID(response.data.id);
                 setName(response.data.name);
                 setPrice(response.data.price);
-                setBrand(response.data.brand);
+                setBrand(response.data.categoryId);
                 setGender(response.data.gender);
                 setSize(response.data.size);
                 setImageName(response.data.imagePath);
+            })
+            .catch((error) => {
+                console.error('messsage from update component:', error);
+            });
+
+        GET_ALL_CATEGORY()
+            .then((response) => {
+                console.log(
+                    'messages from respone UpdateProduct:',
+                    response.data
+                );
+                setCategory(response.data);
             })
             .catch((error) => {
                 console.error('messsage from update component:', error);
@@ -46,7 +61,7 @@ export default function UpdateProduct({ match, location }) {
         const formData = new FormData();
         formData.append('Name', name);
         formData.append('Price', price);
-        formData.append('Brand', brand);
+        formData.append('CategoryId', brand);
         formData.append('Gender', gender);
         formData.append('Size', size);
         formData.append('ImageFile', imageName);
@@ -95,8 +110,10 @@ export default function UpdateProduct({ match, location }) {
                             onChange={(event) => setBrand(event.target.value)}
                         >
                             <option>Choose...</option>
-                            <option value="1">Adidas</option>
-                            <option value="2">Nike</option>
+                            {category &&
+                                category.map((c, index) => (
+                                    <option value={c.id}>{c.name}</option>
+                                ))}
                         </Form.Select>
                     </Form.Group>
 
