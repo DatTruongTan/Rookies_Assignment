@@ -53,6 +53,13 @@ const NavBar = () => {
                             >
                                 Users
                             </a>
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/category"
+                            >
+                                Categories
+                            </a>
                         </div>
                         <ul class="d-flex align-items-center navbar-nav">
                             <li class="nav-item me-3">{userName}</li>
