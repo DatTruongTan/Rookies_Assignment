@@ -96,13 +96,6 @@ const ListProduct = () => {
         });
     };
 
-    const fetchDataCallbackAsync = async () => {
-        let data = await getProductsRequest(query);
-        console.log('fetchDataCallbackAsync');
-        console.log(data);
-        setProduct(data);
-    };
-
     useEffect(() => {
         async function fetchDataAsync() {
             let result = await getProductsRequest(query);
@@ -156,7 +149,6 @@ const ListProduct = () => {
                     columnValue: query.sortColumn,
                     orderBy: query.sortOrder,
                 }}
-                fetchData={fetchDataCallbackAsync}
             />
         </div>
     );
