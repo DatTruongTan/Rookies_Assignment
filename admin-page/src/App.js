@@ -7,6 +7,7 @@ import {
     USER,
     AUTH,
     HOME,
+    CATEGORY,
 } from './Constants/pages';
 
 import CreateProduct from './Components/Create';
@@ -25,6 +26,7 @@ function App() {
                 <Switch>
                     <Route exact path={HOME} component={ListProduct} />
                     <Route exact path={USER} component={ListUser} />
+                    <Route exact path={CATEGORY} component={ListCategory} />
                     <Route path={AUTH} component={Auth} />
                     <Route
                         exact
