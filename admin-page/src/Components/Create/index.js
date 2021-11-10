@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { POST_ADD_PRODUCT } from '../../Services/apiService';
 import { createProductRequest } from '../services/request';
 import { HOME } from '../../Constants/pages';
 
+import {
+    GET_ALL_CATEGORY,
+    DELETE_CATEGORY_ID,
+} from '../../Services/CategoryApiService';
+
 const CreateProduct = () => {
     const [formValue, setformValue] = useState({});
     const [imageName, setImageName] = useState(null);
+    const [category, setCategory] = useState(null);
     let history = useHistory();
+
+    useEffect(() => {
+        GET_ALL_CATEGORY()
+            .then((response) => {
+                console.log(
+                    'messages from respone UpdateProduct:',
+                    response.data
+                );
+                setCategory(response.data);
+            })
+            .catch((error) => {
+                console.error('messsage from update component:', error);
+            });
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -16,7 +36,7 @@ const CreateProduct = () => {
         const formData = new FormData();
         formData.append('Name', formValue.Name);
         formData.append('Price', formValue.Price);
-        formData.append('Brand', formValue.Brand);
+        formData.append('CategoryId', formValue.CategoryId);
         formData.append('Gender', formValue.Gender);
         formData.append('Size', formValue.Size);
         formData.append('ImageFile', imageName);
@@ -74,13 +94,17 @@ const CreateProduct = () => {
                             onChange={({ target }) =>
                                 setformValue((state) => ({
                                     ...state,
-                                    Brand: target.value,
+                                    CategoryId: target.value,
                                 }))
                             }
                         >
                             <option>Choose...</option>
-                            <option value="1">Adidas</option>
-                            <option value="2">Nike</option>
+                            {category &&
+                                category.map((c, index) => (
+                                    <option value={c.id}>{c.name}</option>
+                                ))}
+                            {/* <option value="1">Adidas</option>
+                            <option value="2">Nike</option> */}
                         </Form.Select>
                     </Form.Group>
 
