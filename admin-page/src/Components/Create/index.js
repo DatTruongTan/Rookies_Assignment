@@ -5,10 +5,7 @@ import { POST_ADD_PRODUCT } from '../../Services/apiService';
 import { createProductRequest } from '../services/request';
 import { HOME } from '../../Constants/pages';
 
-import {
-    GET_ALL_CATEGORY,
-    DELETE_CATEGORY_ID,
-} from '../../Services/CategoryApiService';
+import { GET_ALL_CATEGORY } from '../../Services/CategoryApiService';
 
 const CreateProduct = () => {
     const [formValue, setformValue] = useState({});
@@ -103,8 +100,6 @@ const CreateProduct = () => {
                                 category.map((c, index) => (
                                     <option value={c.id}>{c.name}</option>
                                 ))}
-                            {/* <option value="1">Adidas</option>
-                            <option value="2">Nike</option> */}
                         </Form.Select>
                     </Form.Group>
 
